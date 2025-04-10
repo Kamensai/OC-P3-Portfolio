@@ -38,23 +38,38 @@ const categories = await reponseCategories.json();
 function generateCategories(categories){
     // Récupération de l'élément du DOM qui accueillera les Catégories
     const divCategories = document.querySelector(".categories");
-    const firstbuttonNameElement = document.createElement("button");
+    const firstBtnNameElement = document.createElement("button");
+
     //Création de la Catégorie "Tous"
-        firstbuttonNameElement.innerText = "Tous";
-        divCategories.appendChild(firstbuttonNameElement);
+        firstBtnNameElement.innerText = "Tous";
+        firstBtnNameElement.classList.add("btnClicked");
+        divCategories.appendChild(firstBtnNameElement);  
 
     for (let i = 0; i < categories.length; i++) {
         
         const button = categories[i];
         
         // Création d’une balise dédiée à une catégorie
-        const buttonNameElement = document.createElement("button");
-        buttonNameElement.innerText = button.name;
+        const btnNameElement = document.createElement("button");
+        btnNameElement.innerText = button.name;
+        btnNameElement.classList.add("btnUnClicked");
         
         // On rattache la balise figure à la section Catégories
-        divCategories.appendChild(buttonNameElement);
-        //buttonNameElement.appendChild(categoryElement);
+        divCategories.appendChild(btnNameElement);
      }
 }
 
 generateCategories(categories);
+
+// Filtrer au click sur une catégorie
+
+const btnList = document.querySelectorAll("button");
+
+btnList.forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.querySelector(".btnClicked")?.classList.remove("btnClicked");
+        document.querySelector("button").classList.add("btnUnClicked");
+        btn.classList.add("btnClicked");
+    })
+})
+
