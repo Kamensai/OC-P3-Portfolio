@@ -43,6 +43,7 @@ function generateCategories(categories){
     //Création de la Catégorie "Tous"
         firstBtnNameElement.innerText = "Tous";
         firstBtnNameElement.classList.add("btnClicked");
+        firstBtnNameElement.id = "Tous";
         divCategories.appendChild(firstBtnNameElement);  
 
     for (let i = 0; i < categories.length; i++) {
@@ -53,6 +54,7 @@ function generateCategories(categories){
         const btnNameElement = document.createElement("button");
         btnNameElement.innerText = button.name;
         btnNameElement.classList.add("btnUnClicked");
+        btnNameElement.id = button.id;
         
         // On rattache la balise figure à la section Catégories
         divCategories.appendChild(btnNameElement);
@@ -62,8 +64,11 @@ function generateCategories(categories){
 generateCategories(categories);
 
 // Filtrer au click sur une catégorie
-
 const btnList = document.querySelectorAll("button");
+const btnFilterAll = document.querySelector("#Tous");
+const btnFilterObjects = document.getElementById("1");
+const btnFilterApartments = document.getElementById("2");
+const btnFilterHotelsAndRestaurants = document.getElementById("3");
 
 btnList.forEach(btn => {
     btn.addEventListener("click", () => {
@@ -73,3 +78,31 @@ btnList.forEach(btn => {
     })
 })
 
+btnFilterAll.addEventListener("click", function () {
+    document.querySelector(".gallery").innerHTML = "";
+    generateWorks(works);
+});
+
+btnFilterObjects.addEventListener("click", function () {
+    const WorksFiltered = works.filter(function (work) {
+        return work.category.id === 1;
+    });
+    document.querySelector(".gallery").innerHTML = "";
+    generateWorks(WorksFiltered);
+});
+
+btnFilterApartments.addEventListener("click", function () {
+    const WorksFiltered = works.filter(function (work) {
+        return work.category.id === 2;
+    });
+    document.querySelector(".gallery").innerHTML = "";
+    generateWorks(WorksFiltered);
+});
+
+btnFilterHotelsAndRestaurants.addEventListener("click", function () {
+    const WorksFiltered = works.filter(function (work) {
+        return work.category.id === 3;
+    });
+    document.querySelector(".gallery").innerHTML = "";
+    generateWorks(WorksFiltered);
+});
