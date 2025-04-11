@@ -30,7 +30,9 @@ footer, header, hgroup, menu, nav, section {
 }
 :root {
     --main-color: #1D6154;
-    --btn-bg-color: white;
+	--second-color : #B1663C;
+	--btn-hv-color: #0E2F28;
+    --btn-bg-color: #FFFFFF;
 }
 body {
 	line-height: 1;
@@ -57,10 +59,26 @@ body {
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 }
+/* Maise en page : Footer en bas */
+.site {
+	min-height: 100dvh;
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+	grid-template-columns: minmax(0, 1fr);
+}
 header {
 	display: flex;
 	justify-content: space-between;
 	margin: 50px 0
+}
+
+#projets-link {
+	font-weight: bold;
+}
+
+main {
+	display: flex;
+	flex-direction: column;
 }
 section {
 	margin: 50px 0
@@ -72,7 +90,7 @@ h1{
 	font-family: 'Syne';
 	font-size: 22px;
 	font-weight: 800;
-	color: #B1663C
+	color: var(--second-color)
 }
 
 h1 > span {
@@ -86,7 +104,7 @@ h2{
 	font-family: 'Syne';
 	font-weight: 700;
 	font-size: 30px;
-	color: #1D6154
+	color: var(--main-color);
 }
 nav ul {
 	display: flex;
@@ -99,8 +117,13 @@ nav li {
 	font-size: 1.2em;
 }
 
-li:hover {
-	color: #B1663C;
+nav a {
+	text-decoration: none;
+	color: black;
+}
+
+li a:hover {
+	color: var(--second-color);
 }
 #introduction {
 	display: flex;
@@ -142,11 +165,10 @@ li:hover {
 	border-radius: 25px 25px 25px 25px;
 	border: 1px solid var(--main-color);
 	padding: 5px 15px 5px 15px;
-	
 }
 
 .categories button:hover {
-	background-color: var(--main-color);
+	background-color: var(--btn-hv-color);
 	color: var(--btn-bg-color);
 }
 
@@ -206,8 +228,19 @@ margin: auto;
 input[type="submit"]{
 	font-family: 'Syne';
 	font-weight: 700;
-	color: white;
-	background-color: #1D6154;
+	color: var(--btn-bg-color);
+	background-color: var(--main-color);
+	margin : 2em auto ;
+	width: 180px;
+	text-align: center;
+	border-radius: 60px ;
+}
+
+input[type="submit"]:hover{
+	font-family: 'Syne';
+	font-weight: 700;
+	color: var(--btn-bg-color);
+	background-color: var(--btn-hv-color);
 	margin : 2em auto ;
 	width: 180px;
 	text-align: center;
@@ -217,6 +250,40 @@ input[type="submit"]{
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
-	margin: 2em
+	margin: 2em;
 }
 
+/* Login page*/
+#login-link {
+	font-weight: bold ;
+}
+#login {
+	width: 30%;
+	margin: 100px auto auto auto;
+}
+#login > * {
+	text-align: center;
+}
+#login h2{
+	margin-bottom: 20px;
+}
+
+#login p {
+	text-decoration: underline;
+}
+#login form {
+	text-align: left;
+	margin-top:30px;
+	display: flex;
+	flex-direction: column;
+}
+
+#login input {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+#login label {
+	margin: 2em 0 1em 0;
+}
