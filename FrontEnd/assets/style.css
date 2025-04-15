@@ -148,9 +148,27 @@ li a:hover {
 #introduction p {
 	margin-bottom: 0.5em;
 }
+/* Project Title*/
+.title-projects {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 30px;
+}
+
+.title-projects p{
+	margin-left: 10px;
+}
+
+.modif-btn{
+	display: flex;
+	flex-direction: row;
+	margin-left: 20px;
+}
+
 #portfolio h2 {
 	text-align: center;
-	margin-bottom: 1em;
 }
 
 .categories {

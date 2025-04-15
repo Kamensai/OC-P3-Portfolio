@@ -1,12 +1,31 @@
+import {createLoginLink, createLogoutBtn, clickLogout} from "./login.js";
+
 /*********************************************************************************
  * 
  * Ce fichier contient toutes les fonctions nécessaires à l'affichage des projets. 
  * 
  *********************************************************************************/
 
+//Récupération du token stockés dans le localStorage
+let token = window.localStorage.getItem("token");
+
+if (token == null) {
+    // Create Login link
+    createLoginLink();
+} else {
+    token = JSON.parse(token);
+    // Création de l'icone de modification des projets
+    addModifBtn();
+    // Create Logout button
+    createLogoutBtn();
+    clickLogout();
+}
+
+
+
 // Récupération des projets (works) depuis l'api
-const reponseWorks = await fetch('http://localhost:5678/api/works');
-const works = await reponseWorks.json();
+const responseWorks = await fetch("http://localhost:5678/api/works");
+const works = await responseWorks.json();
 
 function generateWorks(works){
     for (let i = 0; i < works.length; i++) {
@@ -31,9 +50,11 @@ function generateWorks(works){
 
 generateWorks(works);
 
+
+
 // Affichage des catégories
-const reponseCategories = await fetch('http://localhost:5678/api/categories');
-const categories = await reponseCategories.json();
+const responseCategories = await fetch('http://localhost:5678/api/categories');
+const categories = await responseCategories.json();
 
 function generateCategories(categories){
     // Récupération de l'élément du DOM qui accueillera les Catégories
@@ -106,3 +127,20 @@ btnFilterHotelsAndRestaurants.addEventListener("click", function () {
     document.querySelector(".gallery").innerHTML = "";
     generateWorks(WorksFiltered);
 });
+
+function addModifBtn(){
+    const divTitleProjects = document.querySelector(".title-projects");
+    const divModifBtn = document.createElement("div");
+    divModifBtn.classList.add("modif-btn");
+    const iconModifElement = document.createElement("i");
+    iconModifElement.classList.add("fa-regular");
+    iconModifElement.classList.add("fa-pen-to-square");
+    const textModifElement = document.createElement("p");
+    textModifElement.innerText = "modifier";
+    divModifBtn.appendChild(iconModifElement);
+    divModifBtn.appendChild(textModifElement);
+    divTitleProjects.appendChild(divModifBtn);
+
+    // déplacer le titre au centre
+    document.getElementById("title-project").style.marginLeft = "100px" ;
+}
