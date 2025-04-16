@@ -85,7 +85,7 @@ function generateCategories(categories){
 generateCategories(categories);
 
 // Filtrer au click sur une catégorie
-const btnList = document.querySelectorAll("button");
+const btnList = document.querySelectorAll(".categories button");
 const btnFilterAll = document.querySelector("#Tous");
 const btnFilterObjects = document.getElementById("1");
 const btnFilterApartments = document.getElementById("2");
@@ -94,7 +94,7 @@ const btnFilterHotelsAndRestaurants = document.getElementById("3");
 btnList.forEach(btn => {
     btn.addEventListener("click", () => {
         document.querySelector(".btnClicked")?.classList.remove("btnClicked");
-        document.querySelector("button").classList.add("btnUnClicked");
+        document.querySelector(".categories button").classList.add("btnUnClicked");
         btn.classList.add("btnClicked");
     })
 })
@@ -129,17 +129,23 @@ btnFilterHotelsAndRestaurants.addEventListener("click", function () {
 });
 
 function addModifBtn(){
+    //Création du l'élément cliquable pour des modifications de projets
     const divTitleProjects = document.querySelector(".title-projects");
-    const divModifBtn = document.createElement("div");
-    divModifBtn.classList.add("modif-btn");
+    const divModif = document.createElement("div");
+    const aModifLink = document.createElement("a");
+    aModifLink.classList.add("js-modal");
+    aModifLink.href = "#modal1";
+
     const iconModifElement = document.createElement("i");
     iconModifElement.classList.add("fa-regular");
     iconModifElement.classList.add("fa-pen-to-square");
     const textModifElement = document.createElement("p");
     textModifElement.innerText = "modifier";
-    divModifBtn.appendChild(iconModifElement);
-    divModifBtn.appendChild(textModifElement);
-    divTitleProjects.appendChild(divModifBtn);
+
+    aModifLink.appendChild(iconModifElement);
+    aModifLink.appendChild(textModifElement);
+    divModif.appendChild(aModifLink)
+    divTitleProjects.appendChild(divModif);
 
     // déplacer le titre au centre
     document.getElementById("title-project").style.marginLeft = "100px" ;

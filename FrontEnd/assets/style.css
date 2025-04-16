@@ -33,6 +33,7 @@ footer, header, hgroup, menu, nav, section {
 	--second-color : #B1663C;
 	--btn-hv-color: #0E2F28;
     --btn-bg-color: #FFFFFF;
+	--txt-color: #000000;
 }
 body {
 	line-height: 1;
@@ -161,10 +162,16 @@ li a:hover {
 	margin-left: 10px;
 }
 
-.modif-btn{
+.js-modal{
 	display: flex;
 	flex-direction: row;
 	margin-left: 20px;
+	color: var(--txt-color);
+	text-decoration: none;
+}
+
+.js-modal :visited{
+	text-decoration: none;
 }
 
 #portfolio h2 {
@@ -304,4 +311,110 @@ footer nav ul {
 }
 #login label {
 	margin: 2em 0 1em 0;
+}
+
+/* Style de la modal*/
+.modal {
+	/*display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	/*z-index: 1; /* Sit on top */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	
+	/*background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	/*padding-top: 60px; */
+}
+
+.modal-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 630px;
+	height: 680px;
+	/*overflow: auto; /* Enable scroll if needed */
+	background-color: var(--btn-bg-color);
+	padding: 40px;
+	border-radius: 10px;
+}
+
+#title-modal {
+	font-size: 26px;
+	text-align: center;
+}
+
+/* Quand il y a l'icon de flèche gauche 
+#modal-top {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+	font-size:large;
+}*/
+
+
+
+#modal-top {
+	width: 100%;
+	margin-bottom: 40px;
+	font-size:large;
+}
+
+.fa-arrow-left {
+	display: none;
+}
+
+#modal-top .fa-xmark {
+	float: right;
+}
+
+#modal-presentation {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	grid-template-rows: repeat(3, 1fr);
+	grid-row-gap: 20px;
+	grid-column-gap: 8px;
+	width: 420px;
+	height: 400px;
+	margin: auto;
+	padding-bottom: 40px;
+	overflow: auto;
+	border-bottom: 2px solid #B3B3B3;
+}
+
+#modal-presentation .picture{
+	height: 110px;
+	background-color: greenyellow;
+}
+
+#add-picture-btn {
+	font-family: 'Syne';
+	font-weight: 700;
+	color: var(--btn-bg-color);
+	background-color: var(--main-color);
+	padding: 10px 20px 10px 20px;
+	width: 237px;
+	text-align: center;
+	border: 1px solid var(--main-color);
+	border-radius: 60px ;
+}
+
+#valid-picture-btn {
+	display: none;
+}
+
+.fa-trash-can {
+	float: right;
+	color: var(--btn-bg-color);
+	background-color: var(--txt-color);
+	padding: 4px;
+	margin: 4px;
+	border-radius: 4px;
+	cursor: pointer;
 }
