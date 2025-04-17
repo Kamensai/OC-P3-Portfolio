@@ -37,8 +37,7 @@ async function login() {
             const login = await responseLogin.json();
             // Vérification de l'email et du mot de passe côté backend pour la connexion
 
-            const token = getToken(login);
-            setTokenInLocalStorage(token);
+            setTokenInLocalStorage(login);
 
             document.location.href = "index.html";
             
@@ -87,18 +86,12 @@ function validatePassword(password) {
     }
     
 }
-// Récupération du token
-async function getToken(login) {
-    const token = login.token;
-    console.log("Token : " + token);
-    const valeurToken = JSON.stringify(token);
-    console.log(valeurToken);
-    return token;
-}
 // Sauvegarde du token dans le LocalStorage
-function setTokenInLocalStorage(token){
-    const valeurToken = JSON.stringify(token);
-    window.localStorage.setItem("token", valeurToken);
+function setTokenInLocalStorage(login){
+    const token = login.token;
+    const valueToken = JSON.stringify(token);
+    console.log("strungify valueToken : "+ valueToken);
+    window.localStorage.setItem("token", valueToken);
 }
 
 

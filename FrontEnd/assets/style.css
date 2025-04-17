@@ -162,6 +162,12 @@ li a:hover {
 	margin-left: 10px;
 }
 
+#modif-link {
+	border: none;
+	background-color: var(--btn-bg-color);
+	cursor: pointer;
+}
+
 .js-modal{
 	display: flex;
 	flex-direction: row;
@@ -366,12 +372,13 @@ footer nav ul {
 	font-size:large;
 }
 
-.fa-arrow-left {
-	display: none;
+#modal-top .fa-arrow-left {
+	cursor: pointer;
 }
 
 #modal-top .fa-xmark {
 	float: right;
+	cursor: pointer;
 }
 
 #modal-presentation {

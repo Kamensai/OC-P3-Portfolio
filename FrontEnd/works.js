@@ -1,4 +1,5 @@
 import {createLoginLink, createLogoutBtn, clickLogout} from "./login.js";
+import {initializeModal} from "./modale.js";
 
 /*********************************************************************************
  * 
@@ -8,17 +9,21 @@ import {createLoginLink, createLogoutBtn, clickLogout} from "./login.js";
 
 //Récupération du token stockés dans le localStorage
 let token = window.localStorage.getItem("token");
+// Cache le lien "modifier" si l'utilisateur n'est pas connecté
+let modifBtn = document.getElementById("modif-link");
+modifBtn.style.display = "none";
 
 if (token == null) {
     // Create Login link
     createLoginLink();
 } else {
-    token = JSON.parse(token);
-    // Création de l'icone de modification des projets
-    addModifBtn();
+    const valueToken = JSON.parse(token);
+    console.log("ValueToken : " + valueToken);
     // Create Logout button
     createLogoutBtn();
     clickLogout();
+    // Création de l'icone de modification des projets
+    addModifBtn();
 }
 
 
@@ -128,13 +133,16 @@ btnFilterHotelsAndRestaurants.addEventListener("click", function () {
     generateWorks(WorksFiltered);
 });
 
+initializeModal();
+
 function addModifBtn(){
     //Création du l'élément cliquable pour des modifications de projets
-    const divTitleProjects = document.querySelector(".title-projects");
+    /*const divTitleProjects = document.querySelector(".title-projects");
     const divModif = document.createElement("div");
     const aModifLink = document.createElement("a");
-    aModifLink.classList.add("js-modal");
     aModifLink.href = "#modal1";
+    aModifLink.classList.add("js-modal");
+    
 
     const iconModifElement = document.createElement("i");
     iconModifElement.classList.add("fa-regular");
@@ -146,7 +154,11 @@ function addModifBtn(){
     aModifLink.appendChild(textModifElement);
     divModif.appendChild(aModifLink)
     divTitleProjects.appendChild(divModif);
+    */
+    
+    modifBtn.style.display = null;
 
     // déplacer le titre au centre
     document.getElementById("title-project").style.marginLeft = "100px" ;
+    
 }
