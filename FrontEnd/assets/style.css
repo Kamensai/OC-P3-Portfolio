@@ -60,7 +60,7 @@ body {
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 }
-/* Maise en page : Footer en bas */
+/* Mise en page : Footer en bas */
 .site {
 	min-height: 100dvh;
 	display: grid;
@@ -166,6 +166,34 @@ li a:hover {
 	border: none;
 	background-color: var(--btn-bg-color);
 	cursor: pointer;
+}
+
+#modal1 {
+	display: flex;
+}
+
+#modal1.hidden {
+	display: none;
+}
+
+#modal-presentation {
+	display: block;
+}
+
+#modal-top .hidden {
+	display: none;
+}
+
+#modal-presentation.hidden {
+	display: none;
+}
+
+#modal-add-photo.hidden {
+	display: none;
+}
+
+.hidden {
+	display: none;
 }
 
 .js-modal{
@@ -335,6 +363,15 @@ footer nav ul {
 	/*background-color: rgb(0,0,0); /* Fallback color */
 	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 	/*padding-top: 60px; */
+	animation: fadeIn 0.5s both;
+}
+
+.modal[aria-hidden=true] {
+	animation-name: fadeOut;
+}
+
+.modal[aria-hidden=true] .modal-wrapper {
+	animation-name: slideOutToBottom;
 }
 
 .modal-wrapper {
@@ -348,6 +385,11 @@ footer nav ul {
 	background-color: var(--btn-bg-color);
 	padding: 40px;
 	border-radius: 10px;
+	animation: slideInFromTop 0.5s both;
+}
+
+.modal-wrapper :focus {
+	box-shadow: 0 0 20px var(--main-color)	;	
 }
 
 #title-modal {
@@ -388,19 +430,107 @@ footer nav ul {
 	grid-row-gap: 20px;
 	grid-column-gap: 8px;
 	width: 420px;
-	height: 400px;
+	height: 450px;
 	margin: auto;
 	padding-bottom: 40px;
 	overflow: auto;
 	border-bottom: 2px solid #B3B3B3;
 }
-
-#modal-presentation .picture{
-	height: 110px;
-	background-color: greenyellow;
+#modal-presentation .picture img {
+	width: 100%;
+	object-fit: cover;
 }
 
-#add-picture-btn {
+#modal-presentation .picture{
+	position: relative;
+	height: 110px;
+}
+
+#modal-add-photo {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 420px;
+	height: 450px;
+	margin: auto;
+	padding-bottom: 40px;
+	border-bottom: 2px solid #B3B3B3;
+}
+
+#form-add-photo {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	
+}
+#form-add-photo > * {
+	font-family: 'Work Sans';
+	text-align: left;
+}
+#form-add-photo h2{
+	margin-bottom: 20px;
+}
+
+#form-add-photo p {
+	text-decoration: underline;
+}
+#form-add-photo form {
+	text-align: left;
+	margin-top:30px;
+}
+
+#form-add-photo input, select {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+#form-add-photo label {
+	text-align: left;
+	margin: 2em 0 1em 0;
+}
+
+#photo-input {
+
+}
+
+input[type=file] {
+	display: none;
+  }
+
+  #form-add-photo #drop-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 420px;
+	height: 169px;
+	background-color: #E8F1F6;
+	margin-top: 0px;
+	gap: 10px;
+}
+
+.fa-image {
+	font-size: 70px;
+	color: #B9C5CC;
+}
+
+#form-add-photo .add-image-btn {
+	font-family: 'Syne';
+	font-weight: 700;
+	color: #306685;
+	padding: 10px 20px 10px 20px;
+	width: fit-content;
+	text-align: center;
+	border-radius: 60px ;
+	background-color: #B9C5CC;
+	border: none;
+	text-decoration: none;
+}
+
+
+#add-picture-btn, #valid-picture-btn  {
 	font-family: 'Syne';
 	font-weight: 700;
 	color: var(--btn-bg-color);
@@ -412,16 +542,43 @@ footer nav ul {
 	border-radius: 60px ;
 }
 
-#valid-picture-btn {
-	display: none;
+#add-picture-btn :active, :focus{
+	outline-style: none;
+	border-style: none;	
+}
+
+#valid-picture-btn :active, :focus {
+	outline-style: none;
+	border-style: none;		
 }
 
 .fa-trash-can {
-	float: right;
+	position: absolute; 
+	top:0; 
+	right:0;
 	color: var(--btn-bg-color);
 	background-color: var(--txt-color);
 	padding: 4px;
 	margin: 4px;
 	border-radius: 4px;
 	cursor: pointer;
+}
+
+/* Animations */
+@keyframes fadeIn {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+}
+@keyframes fadeOut {
+	0% { opacity: 1; }
+	100% { opacity: 0; }
+}
+
+@keyframes slideInFromTop {
+	0% { transform: translateY(-50px); }
+	100% { transform: translateY(0); }
+}
+@keyframes slideOutToBottom {
+	0% { transform: translateY(0); }
+	100% { transform: translateY(50px); }
 }

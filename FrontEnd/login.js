@@ -32,7 +32,7 @@ async function login() {
                 headers: { "Content-Type": "application/json" },
                 body: chargeUtile
             });
-            console.log(responseLogin.ok);
+            console.log(responseLogin);
             validateLogin(responseLogin);
             const login = await responseLogin.json();
             // Vérification de l'email et du mot de passe côté backend pour la connexion
@@ -58,9 +58,10 @@ login();
  */
 // Vérification de l'email et du mot de passe pour la connexion : Réponse attendure TRUE (200)
 function validateLogin(responseLogin) {
+    console.log(responseLogin);
     if(!responseLogin.ok){
         throw new Error("Erreur dans l’identifiant ou le mot de passe.");
-    }     
+    }   
 }
 
 /**

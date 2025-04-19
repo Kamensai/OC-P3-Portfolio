@@ -55,7 +55,32 @@ function generateWorks(works){
 
 generateWorks(works);
 
+//  Récupération et affichage des travaux dans la modale
+function generateWorksInModal(works){
+    for (let i = 0; i < works.length; i++) {
 
+        const figure = works[i];
+        // Récupération de l'élément du DOM qui accueillera les Projets
+        const divModalPresentation = document.querySelector("#modal-presentation");
+        // Création d’une balise dédiée à un projet
+        const workElement = document.createElement("div");
+        workElement.classList.add("picture");
+        
+        // Création des balises 
+        const imageElement = document.createElement("img");
+        imageElement.src = figure.imageUrl;
+        const iconTrashElement = document.createElement("i");
+        iconTrashElement.classList.add("fa-regular");
+        iconTrashElement.classList.add("fa-trash-can");
+        
+        // On rattache la balise figure à la div modal-presentation 
+        workElement.appendChild(imageElement);     
+        workElement.appendChild(iconTrashElement);  
+        divModalPresentation.appendChild(workElement);
+     }
+}
+
+generateWorksInModal(works);
 
 // Affichage des catégories
 const responseCategories = await fetch('http://localhost:5678/api/categories');

@@ -49,31 +49,53 @@
 				<p>modifier</p>
 			</button>
 		</div>
-		<aside id="modal1" class="modal" aria-hidden="true" role="dialog" aria-labelledby="title-modal" style="display:none;">
+		<aside id="modal1" class="modal hidden" aria-hidden="true" role="dialog" aria-labelledby="title-modal">
 			<div class="modal-wrapper js-modal-stop">
-				<div id="modal-top"><i class="fa-solid fa-arrow-left"></i> <i class="fa-solid fa-xmark"></i></div>
-				<h3 id="title-modal"> Galerie photo</h3>
-				<div id="modal-presentation">
-					<div class="picture"><i class="fa-solid fa-trash-can"></i></div>
-					<div class="picture"><i class="fa-solid fa-trash-can"></i></div>
-					<div class="picture"><i class="fa-solid fa-trash-can"></i></div>
-					<div class="picture"><i class="fa-solid fa-trash-can"></i></div>
-					<div class="picture"><i class="fa-solid fa-trash-can"></i></div>
-					<div class="picture"><i class="fa-solid fa-trash-can"></i></div>
-					<div class="picture"><i class="fa-solid fa-trash-can"></i></div>
-					<div class="picture"><i class="fa-solid fa-trash-can"></i></div>
-					<div class="picture"><i class="fa-solid fa-trash-can"></i></div>
-					<div class="picture"><i class="fa-solid fa-trash-can"></i></div>
-					<div class="picture"><i class="fa-solid fa-trash-can"></i></div>
-					
-					
+				<div id="modal-top"><i class="fa-solid fa-arrow-left hidden"></i> <i class="fa-solid fa-xmark"></i></div>
+				<h3 id="title-modal">Galerie photo</h3>
+				<div id="modal-presentation" class="hidden">
+														
 				</div>
-				<button id="add-picture-btn">Ajouter une photo</button>
-				<button id="valid-picture-btn">Valider</button>
+				<div id="modal-add-photo" class="hidden">
+					<form id="form-add-photo" method="post">
+						<label for="photoInput" id="drop-container">
+							<i class="fa-solid fa-image"></i>
+							<p class="add-image-btn">+ Ajouter photo</p>
+							jpeg. png : 4mo max	
+							<input type="file" id="photoInput" accept=".png, .jpg, .jpeg" required>
+						</label>
+						<br>
+						<label for="photoTitle">Titre</label>
+						<input type="text" id="photoTitle" required><br>
+						<label for="photoCategory">Catégorie</label>
+						<select id="photoCategory" required>
+						<option value=""></option>
+						<option value="1">Objets</option>
+						<option value="2">Appartements</option>
+						<option value="3">Hotels & restaurants</option>
+						</select><br>
+					</form>
+						
+				</div>
+				<button id="add-picture-btn" class="hidden">Ajouter une photo</button>
+				<button id="valid-picture-btn" form="form-add-photo" class="hidden">Valider</button>
 	
 			</div>
 	
 		</aside>
+<!-- 
+		<aside id="modal2" class="modal" aria-hidden="true" role="dialog" aria-labelledby="title-modal" style="display:none;">
+			<div class="modal-wrapper js-modal-stop">
+				<div id="modal-top"><i class="fa-solid fa-arrow-left"></i> <i class="fa-solid fa-xmark"></i></div>
+				<h3 id="title-modal">Ajout photo</h3>
+				<div id="modal-presentation">
+									
+				</div>
+				<button id="valid-picture-btn" style="display: none;">Valider</button>
+	
+			</div>
+	
+		</aside> -->
 		<div class="categories">
 			
 		</div>
