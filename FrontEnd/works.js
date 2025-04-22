@@ -8,7 +8,7 @@ import {initializeModal} from "./modale.js";
  *********************************************************************************/
 
 //Récupération du token stockés dans le localStorage
-let token = window.localStorage.getItem("token");
+export let token = window.localStorage.getItem("token");
 // Cache le lien "modifier" si l'utilisateur n'est pas connecté
 let modifBtn = document.getElementById("modif-link");
 modifBtn.style.display = "none";
@@ -30,9 +30,9 @@ if (token == null) {
 
 // Récupération des projets (works) depuis l'api
 const responseWorks = await fetch("http://localhost:5678/api/works");
-const works = await responseWorks.json();
+export let works = await responseWorks.json();
 
-function generateWorks(works){
+export function generateWorks(works){
     for (let i = 0; i < works.length; i++) {
 
         const figure = works[i];
@@ -56,7 +56,7 @@ function generateWorks(works){
 generateWorks(works);
 
 //  Récupération et affichage des travaux dans la modale
-function generateWorksInModal(works){
+export function generateWorksInModal(works){
     for (let i = 0; i < works.length; i++) {
 
         const figure = works[i];
@@ -70,6 +70,7 @@ function generateWorksInModal(works){
         const imageElement = document.createElement("img");
         imageElement.src = figure.imageUrl;
         const iconTrashElement = document.createElement("i");
+        iconTrashElement.id = figure.id;
         iconTrashElement.classList.add("fa-regular");
         iconTrashElement.classList.add("fa-trash-can");
         
@@ -105,7 +106,7 @@ function generateCategories(categories){
         const btnNameElement = document.createElement("button");
         btnNameElement.innerText = button.name;
         btnNameElement.classList.add("btnUnClicked");
-        btnNameElement.id = button.id;
+        btnNameElement.id = "category-" + button.id;
         
         // On rattache la balise figure à la section Catégories
         divCategories.appendChild(btnNameElement);
@@ -114,12 +115,43 @@ function generateCategories(categories){
 
 generateCategories(categories);
 
+// Mets à jour la liste Works
+export async function updateWorks() {
+    try {
+        // Récupérer les données mises à jour depuis le backend
+        const responseWorks = await fetch("http://localhost:5678/api/works");
+        if (!responseWorks.ok) {
+            throw new Error("Erreur lors de la récupération des travaux.");
+        }
+        const updatedWorks = await responseWorks.json();
+
+        // Mettre à jour la variable works
+        works = updatedWorks;
+
+        // Réinitialiser et régénérer l'affichage
+        document.querySelector(".gallery").innerHTML = "";
+        generateWorks(works);
+
+        console.log("Liste des travaux mise à jour :", works);
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour des travaux :", error);
+    }
+}
+
+export function updateModalPresentation() {
+    const modalPresentation = document.querySelector("#modal-presentation");
+    if (modalPresentation) {
+        modalPresentation.innerHTML = "";
+        generateWorksInModal(works);
+    }
+}
+
 // Filtrer au click sur une catégorie
 const btnList = document.querySelectorAll(".categories button");
 const btnFilterAll = document.querySelector("#Tous");
-const btnFilterObjects = document.getElementById("1");
-const btnFilterApartments = document.getElementById("2");
-const btnFilterHotelsAndRestaurants = document.getElementById("3");
+const btnFilterObjects = document.querySelector(".categories #category-1");
+const btnFilterApartments = document.querySelector(".categories #category-2");
+const btnFilterHotelsAndRestaurants = document.querySelector(".categories #category-3");
 
 btnList.forEach(btn => {
     btn.addEventListener("click", () => {
@@ -158,6 +190,7 @@ btnFilterHotelsAndRestaurants.addEventListener("click", function () {
     generateWorks(WorksFiltered);
 });
 
+//  Création de la modale
 initializeModal();
 
 function addModifBtn(){

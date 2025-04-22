@@ -1,3 +1,5 @@
+import {generateWorks, generateWorksInModal, token, updateWorks, updateModalPresentation} from "./works.js";
+
 /*********************************************************************************
  * 
  * Ce fichier contient toutes les fonctions nécessaires à l'utilisation de la modale. 
@@ -28,6 +30,7 @@ const openModal = function () {
     modal.addEventListener("click", closeModal);
     modal.querySelector("#modal-top .fa-xmark").addEventListener("click", closeModal);
     modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
+    clickOnDeleteIcon();
 }
 
 const closeModal = function () {
@@ -100,6 +103,73 @@ const showPresentationModal = function() {
     returnIcon.classList.add("hidden");
 }
 
+const deleteWorkInModal = async function (e){
+    e.preventDefault();
+    modal = document.querySelector(btnModal.getAttribute("href"));
+    const pictureId = e.target.id;
+    console.log(pictureId);
+    if (!pictureId) {
+        console.error("L'ID de l'image n'a pas été trouvé.");
+        return;
+    }
+
+    const valueToken = JSON.parse(token);
+    const urlAPI = `http://localhost:5678/api/works/${pictureId}`;
+
+    try {
+        // Supprimer l'objet côté backend
+        const responseDelete = await fetch(urlAPI, {
+            method: "DELETE",
+            headers: new Headers({
+                'Authorization': `Bearer ${valueToken}`,
+                'Content-Type': '*/*'
+            })
+        });
+
+        if (!responseDelete.ok) {
+            throw new Error("Erreur lors de la suppression du projet.");
+        }
+
+        console.log("Suppression réussie :", responseDelete);
+
+        // Actualiser la liste des travaux
+        await updateWorks();
+
+        // Actualiser l'affichage dans la modale
+        updateModalPresentation();
+    } catch (error) {
+        console.error("Erreur lors de la suppression :", error);
+    }
+};
+/*
+async function replaceGalleryAfterDeletion(){
+    try {
+        // Récupérer les données mises à jour depuis le backend
+        const responseWorks = await fetch("http://localhost:5678/api/works");
+        if (!responseWorks.ok) {
+            throw new Error("Erreur lors de la récupération des travaux après suppression.");
+        }
+        const updatedWorks = await responseWorks.json();
+
+        // Réinitialiser le contenu de .gallery et #modal-presentation
+        document.querySelector(".gallery").innerHTML = "";
+        modal.querySelector("#modal-presentation").innerHTML = "";
+
+        // Générer les éléments avec les données mises à jour
+        generateWorks(updatedWorks);
+        generateWorksInModal(updatedWorks);
+
+        console.log("Affichage mis à jour après suppression.");
+    } catch (error) {
+        console.error("Erreur lors de l'actualisation de l'affichage :", error);
+    }
+}
+
+function deleteWorkInDOM(){
+
+}*/
+
+// Création de la modale
 export function initializeModal(){
     if (!btnModal) {
         console.error("Aucun élément avec la classe .js-modal trouvé dans le DOM.");
@@ -120,6 +190,17 @@ function clickOnReturnIcon(){
     returnIcon = modal.querySelector("#modal-top .fa-arrow-left");
     returnIcon.addEventListener("click", showPresentationModal);
 }
+
+// Gestion des projets dans la modale Ajout et Suppression
+function clickOnDeleteIcon() {
+    modal = document.querySelector(btnModal.getAttribute("href"));
+    console.log(modal.querySelectorAll(".picture .fa-trash-can"));
+    modal.querySelectorAll(".picture .fa-trash-can").forEach(i => {
+        i.addEventListener("click", deleteWorkInModal);
+    })   
+}
+
+
 
 // Gère l'utilisation via le clavier
 window.addEventListener("keydown", function (e) {
