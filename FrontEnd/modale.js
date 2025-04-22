@@ -86,7 +86,9 @@ const showAddPhotoModal = function() {
     addPhotoBtn.classList.add("hidden");
     validPhotoBtn.classList.remove("hidden");
     clickOnReturnIcon();
+    clickOnAddPhoto();
 }
+
 
 const showPresentationModal = function() {
     modal = document.querySelector(btnModal.getAttribute("href"));
@@ -101,11 +103,11 @@ const showPresentationModal = function() {
 
     returnIcon = modal.querySelector("#modal-top .fa-arrow-left");
     returnIcon.classList.add("hidden");
+    clickOnDeleteIcon();
 }
 
 const deleteWorkInModal = async function (e){
     e.preventDefault();
-    modal = document.querySelector(btnModal.getAttribute("href"));
     const pictureId = e.target.id;
     console.log(pictureId);
     if (!pictureId) {
@@ -141,33 +143,36 @@ const deleteWorkInModal = async function (e){
         console.error("Erreur lors de la suppression :", error);
     }
 };
-/*
-async function replaceGalleryAfterDeletion(){
+
+const addWorkInModal = async function (e){
+    e.preventDefault();
+    const valueToken = JSON.parse(token);
+    const formEl = document.querySelector("#form-add-photo");
+    const formData = new FormData(formEl);
+
+    // Envoi du formulaire au backend en utilisant FormData et FetchAPI
     try {
-        // Récupérer les données mises à jour depuis le backend
-        const responseWorks = await fetch("http://localhost:5678/api/works");
-        if (!responseWorks.ok) {
-            throw new Error("Erreur lors de la récupération des travaux après suppression.");
+        const response = await fetch("http://localhost:5678/api/works", {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${valueToken}`
+            },
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error("Erreur lors de l'ajout du projet.");
         }
-        const updatedWorks = await responseWorks.json();
 
-        // Réinitialiser le contenu de .gallery et #modal-presentation
-        document.querySelector(".gallery").innerHTML = "";
-        modal.querySelector("#modal-presentation").innerHTML = "";
+        console.log("Ajout réussi :", await response.json());
 
-        // Générer les éléments avec les données mises à jour
-        generateWorks(updatedWorks);
-        generateWorksInModal(updatedWorks);
-
-        console.log("Affichage mis à jour après suppression.");
+        // Actualiser la liste des travaux
+        await updateWorks();
+        updateModalPresentation();
     } catch (error) {
-        console.error("Erreur lors de l'actualisation de l'affichage :", error);
+        console.error("Erreur lors de l'ajout :", error);
     }
-}
-
-function deleteWorkInDOM(){
-
-}*/
+};
 
 // Création de la modale
 export function initializeModal(){
@@ -200,7 +205,11 @@ function clickOnDeleteIcon() {
     })   
 }
 
-
+// Ajout d'un projet work
+function clickOnAddPhoto() {
+    const formEl = document.querySelector("#form-add-photo");
+    formEl.addEventListener("submit", addWorkInModal);
+}
 
 // Gère l'utilisation via le clavier
 window.addEventListener("keydown", function (e) {
