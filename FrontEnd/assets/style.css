@@ -491,15 +491,20 @@ footer nav ul {
 	margin: 2em 0 1em 0;
 }
 
-#photo-input {
-
-}
-
-input[type=file] {
-	display: none;
+#form-add-photo input[type=file] {
+	opacity: 0;
+	height: 0;
   }
 
-  #form-add-photo #drop-container {
+#form-add-photo input[type=file].hidden {
+	display: none;
+}
+
+#photo-input-error .error-message .hidden{
+	display: none;
+}
+
+#form-add-photo #drop-container {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -527,6 +532,20 @@ input[type=file] {
 	background-color: #B9C5CC;
 	border: none;
 	text-decoration: none;
+}
+
+#form-add-photo .add-image-txt {
+	text-decoration: none;
+	font-size: 11px;
+}
+
+#form-add-photo .fa-image.hidden {
+	display: none;
+}
+
+#previewImage {
+	width: 129px;
+	height: 100%;
 }
 
 

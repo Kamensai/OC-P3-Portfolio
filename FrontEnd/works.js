@@ -12,6 +12,7 @@ export let token = window.localStorage.getItem("token");
 // Cache le lien "modifier" si l'utilisateur n'est pas connecté
 let modifBtn = document.getElementById("modif-link");
 modifBtn.style.display = "none";
+let categoryChosen = "Tous";
 
 if (token == null) {
     // Create Login link
@@ -126,11 +127,21 @@ export async function updateWorks() {
         const updatedWorks = await responseWorks.json();
 
         // Mettre à jour la variable works
-        works = updatedWorks;
-
-        // Réinitialiser et régénérer l'affichage
-        document.querySelector(".gallery").innerHTML = "";
-        generateWorks(works);
+        works = updatedWorks;  
+        switch (categoryChosen) {
+            case "category-1":
+                filterObjectsFunction();
+                break;
+            case "category-2":
+                filterApartmentsFunction();
+                break;
+            case "category-3":
+                filterHotelAndRestaurantsFunction();
+                break;
+            default:
+                filterAllFunction();
+            }
+        
 
         console.log("Liste des travaux mise à jour :", works);
     } catch (error) {
@@ -161,59 +172,87 @@ btnList.forEach(btn => {
     })
 })
 
-btnFilterAll.addEventListener("click", function () {
+const filterAll = function () {
+    categoryChosen = "Tous";
+    console.log(categoryChosen);
+    filterAllFunction();
+}
+
+const filterObjects = function () {
+    categoryChosen = "category-1";
+    console.log(categoryChosen);
+    filterObjectsFunction();
+}
+
+const filterApartments = function () {
+    categoryChosen = "category-2";
+    console.log(categoryChosen);
+    filterApartmentsFunction();
+}
+
+const filterHotelAndRestaurants = function () {
+    categoryChosen = "category-3";
+    console.log(categoryChosen);
+    filterHotelAndRestaurantsFunction();
+}
+
+// Function filtres par catégories
+function filterAllFunction(){
     document.querySelector(".gallery").innerHTML = "";
     generateWorks(works);
-});
+}
 
-btnFilterObjects.addEventListener("click", function () {
+function filterObjectsFunction(){
     const WorksFiltered = works.filter(function (work) {
         return work.category.id === 1;
     });
     document.querySelector(".gallery").innerHTML = "";
     generateWorks(WorksFiltered);
-});
+}
 
-btnFilterApartments.addEventListener("click", function () {
+function filterApartmentsFunction() {
     const WorksFiltered = works.filter(function (work) {
         return work.category.id === 2;
     });
     document.querySelector(".gallery").innerHTML = "";
     generateWorks(WorksFiltered);
-});
+}
 
-btnFilterHotelsAndRestaurants.addEventListener("click", function () {
+function filterHotelAndRestaurantsFunction() {
     const WorksFiltered = works.filter(function (work) {
         return work.category.id === 3;
     });
     document.querySelector(".gallery").innerHTML = "";
     generateWorks(WorksFiltered);
-});
+}
+
+// Filtrer lors du click sur le bouton catégorie
+function filterAllOnClick(){
+    btnFilterAll.addEventListener("click", filterAll);
+}
+
+function filterObjectsOnClick(){
+    btnFilterObjects.addEventListener("click", filterObjects);
+}
+
+function filterApartmentsOnClick() {
+    btnFilterApartments.addEventListener("click", filterApartments);
+}
+
+function filterHotelAndRestaurantsOnClick() {
+    btnFilterHotelsAndRestaurants.addEventListener("click", filterHotelAndRestaurants);
+}
+
 
 //  Création de la modale
 initializeModal();
 
+filterAllOnClick();
+filterObjectsOnClick();
+filterApartmentsOnClick();
+filterHotelAndRestaurantsOnClick();
+
 function addModifBtn(){
-    //Création du l'élément cliquable pour des modifications de projets
-    /*const divTitleProjects = document.querySelector(".title-projects");
-    const divModif = document.createElement("div");
-    const aModifLink = document.createElement("a");
-    aModifLink.href = "#modal1";
-    aModifLink.classList.add("js-modal");
-    
-
-    const iconModifElement = document.createElement("i");
-    iconModifElement.classList.add("fa-regular");
-    iconModifElement.classList.add("fa-pen-to-square");
-    const textModifElement = document.createElement("p");
-    textModifElement.innerText = "modifier";
-
-    aModifLink.appendChild(iconModifElement);
-    aModifLink.appendChild(textModifElement);
-    divModif.appendChild(aModifLink)
-    divTitleProjects.appendChild(divModif);
-    */
-    
     modifBtn.style.display = null;
 
     // déplacer le titre au centre

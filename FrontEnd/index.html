@@ -58,12 +58,14 @@
 				</div>
 				<div id="modal-add-photo" class="hidden">
 					<form id="form-add-photo" method="post">
-						<label for="photoInput" id="drop-container">
-							<i class="fa-solid fa-image"></i>
-							<p class="add-image-btn">+ Ajouter photo</p>
-							jpeg. png : 4mo max	
-							<input type="file" id="photoInput" accept=".png, .jpg, .jpeg" name="image" required>
+						<label for="photoInput" id="drop-container" >
+							<i class="fa-solid fa-image hidden"></i>
+							<p class="add-image-btn hidden">+ Ajouter photo</p>
+							<p class="add-image-txt hidden">jpeg. png : 4mo max	</p> 
+							<img id="previewImage" class="hidden" alt="Preview Image">
+							<input type="file" id="photoInput" accept=".png, .jpg, .jpeg" name="image">
 						</label>
+						<p id="photo-input-error" class="error-message hidden" style="color: red; font-size: 0.9em;"></p>
 						<br>
 						<label for="photoTitle">Titre</label>
 						<input type="text" id="photoTitle"  name="title" required><br>
