@@ -382,9 +382,8 @@ footer nav ul {
 	animation: slideInFromTop 0.5s both;
 }
 
-.modal-wrapper :focus {
-	box-shadow: 0 0 20px var(--main-color)	;	
-}
+
+	
 
 #title-modal {
 	font-size: 26px;
@@ -544,14 +543,25 @@ footer nav ul {
 	border-radius: 60px ;
 }
 
-#add-picture-btn :active, :focus{
-	outline-style: none;
-	border-style: none;	
+/* Appliquer un box-shadow à tous les éléments focusables dans la modale */
+.modal-wrapper :focus {
+    box-shadow: 0 0 10px var(--main-color);
+    outline: none;  
 }
 
-#valid-picture-btn :active, :focus {
-	outline-style: none;
-	border-style: none;		
+/* Appliquer un box-shadow spécifique aux boutons focus */
+#add-picture-btn:focus, 
+#valid-picture-btn:focus  {
+    box-shadow: 0 0 10px var(--main-color);	
+	outline: none;	
+}
+
+/* Appliquer un box-shadow aux champs de formulaire focus */
+#form-add-photo input:focus, 
+#form-add-photo select:focus, 
+#form-add-photo textarea:focus {
+    box-shadow: 0 0 10px var(--main-color);
+    outline: none; /* Supprime le contour par défaut */
 }
 
 .fa-trash-can {

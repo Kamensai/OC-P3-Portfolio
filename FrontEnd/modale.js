@@ -11,25 +11,31 @@ let addPhotoBtn = null;
 let validPhotoBtn = null;
 let returnIcon = null;
 const btnModal = document.querySelector(".js-modal");
-const focusableSelector= "button, a, input, textarea";
 let focusablesElements =[];
 let previouslyFocusedElement = null;
 
 
 const openModal = function () {
     modal = document.querySelector(btnModal.getAttribute("href"));
-    focusablesElements = Array.from(modal.querySelectorAll(focusableSelector));
+    //stock l'élément focus avant la création de la modale
     previouslyFocusedElement = document.querySelector(":focus");
+
+    // Afficher la modale
     modal.classList.remove("hidden");
     modal.querySelector("#modal-presentation").classList.remove("hidden");
     addPhotoBtn = modal.querySelector(".modal-wrapper #add-picture-btn");
     addPhotoBtn.classList.remove("hidden");
-    focusablesElements[0].focus();
+
+    // Configurer les attributs d'accessibilité
     modal.removeAttribute("aria-hidden");
     modal.setAttribute("aria-modal", "true");
+
+    // Ajouter les gestionnaires d'événements
     modal.addEventListener("click", closeModal);
     modal.querySelector("#modal-top .fa-xmark").addEventListener("click", closeModal);
     modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
+    
+    // Initialiser les icônes de suppression
     clickOnDeleteIcon();
 }
 
@@ -99,6 +105,7 @@ const showAddPhotoModal = function() {
     returnIcon.classList.remove("hidden");
     addPhotoBtn.classList.add("hidden");
     validPhotoBtn.classList.remove("hidden");
+
     clickOnReturnIcon();
     clickOnAddPhoto();
     clickOnAddWork();
@@ -356,14 +363,26 @@ window.addEventListener("keydown", function (e) {
         closeModal(e);
     }
     if(e.key === "Tab" && modal != null) {
-        focusInModal(e);
+        trapFocusInModal(e);
     }
 })
 
-const focusInModal = function (e){
+const trapFocusInModal = function (e) {
     e.preventDefault();
-    let index = focusablesElements.findIndex(f => f === modal.querySelector(":focus"));
-    console.log(index);
+    modal = document.querySelector(btnModal.getAttribute("href"));
+
+    if (modal.querySelector("#modal-presentation") && !modal.querySelector("#modal-presentation").classList.contains("hidden")) {
+        // Vue #modal-presentation : Seuls les icônes trash-can et le bouton add-picture-btn sont focusables
+        focusablesElements = Array.from(modal.querySelectorAll("#add-picture-btn"));
+    } else if (modal.querySelector("#modal-add-photo") && !modal.querySelector("#modal-add-photo").classList.contains("hidden")) {
+        // Vue #modal-add-photo : Les inputs et les boutons sont focusables
+        focusablesElements = Array.from(modal.querySelectorAll("#photoTitle, #drop-container, #form-add-photo select, #valid-picture-btn"));
+    }
+
+    // Trouver l'élément actuellement focusé
+    const focusedElement = document.activeElement;
+    let index = focusablesElements.indexOf(focusedElement);
+    
     if(e.shiftKey === true) {
         index--;
     } else {
@@ -375,6 +394,5 @@ const focusInModal = function (e){
     if (index < 0 ) {
         index = focusablesElements.length - 1;
     }
-    console.log(index);
     focusablesElements[index].focus();
 }
