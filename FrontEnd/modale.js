@@ -41,6 +41,7 @@ const closeModal = function () {
     document.getElementById("form-add-photo").reset();
     modal.querySelector("#drop-container #previewImage").src = "";
     modal.querySelector("#drop-container #previewImage").classList.add("hidden");
+    modal.querySelector("#photo-input-error").classList.add("hidden");
 
     addPhotoBtn = modal.querySelector(".modal-wrapper #add-picture-btn");
     validPhotoBtn = modal.querySelector(".modal-wrapper #valid-picture-btn");
@@ -154,6 +155,8 @@ const showPresentationModal = function() {
     fileInput.classList.remove("hidden");
     modal.querySelector("#drop-container #previewImage").src = "";
     modal.querySelector("#drop-container #previewImage").classList.add("hidden");
+    modal.querySelector("#photo-input-error").classList.add("hidden");
+
     
     modal.querySelector("#title-modal").innerHTML = "Galerie photo";
     modal.querySelector("#modal-add-photo").classList.add("hidden");
@@ -183,7 +186,8 @@ const deleteWorkInModal = async function (e){
     if (!confirmation) {
         console.log("Suppression annulée par l'utilisateur.");
         return; // Annuler la suppression si l'utilisateur clique sur "Annuler"
-    }*/
+    }
+        */
 
     // Afficher la modale de confirmation
     const confirmationModal = document.getElementById("confirmation-modal");
