@@ -178,33 +178,63 @@ const deleteWorkInModal = async function (e){
         return;
     }
 
-    const valueToken = JSON.parse(token);
-    const urlAPI = `http://localhost:5678/api/works/${pictureId}`;
+    // Afficher une boîte de confirmation
+    /*const confirmation = window.confirm("Êtes-vous sûr de vouloir supprimer ce projet ?");
+    if (!confirmation) {
+        console.log("Suppression annulée par l'utilisateur.");
+        return; // Annuler la suppression si l'utilisateur clique sur "Annuler"
+    }*/
 
-    try {
-        // Supprimer l'objet côté backend
-        const responseDelete = await fetch(urlAPI, {
-            method: "DELETE",
-            headers: new Headers({
-                'Authorization': `Bearer ${valueToken}`,
-                'Content-Type': '*/*'
-            })
-        });
+    // Afficher la modale de confirmation
+    const confirmationModal = document.getElementById("confirmation-modal");
+    confirmationModal.classList.remove("hidden");
+    confirmationModal.setAttribute("aria-hidden", "false");
 
-        if (!responseDelete.ok) {
-            throw new Error("Erreur lors de la suppression du projet.");
+    // Gérer les boutons de la modale
+    const confirmDeleteBtn = document.getElementById("confirm-delete-btn");
+    const cancelDeleteBtn = document.getElementById("cancel-delete-btn");
+
+    // Si l'utilisateur confirme la suppression
+    confirmDeleteBtn.onclick = async function () {
+        confirmationModal.classList.add("hidden");
+        confirmationModal.setAttribute("aria-hidden", "true");
+
+        const valueToken = JSON.parse(token);
+        const urlAPI = `http://localhost:5678/api/works/${pictureId}`;
+
+        try {
+            // Supprimer l'objet côté backend
+            const responseDelete = await fetch(urlAPI, {
+                method: "DELETE",
+                headers: new Headers({
+                    'Authorization': `Bearer ${valueToken}`,
+                    'Content-Type': '*/*'
+                })
+            });
+
+            if (!responseDelete.ok) {
+                throw new Error("Erreur lors de la suppression du projet.");
+            }
+
+            console.log("Suppression réussie :", responseDelete);
+
+            // Actualiser la liste des travaux
+            await updateWorks();
+
+            // Actualiser l'affichage dans la modale
+            updateModalPresentation();
+            clickOnDeleteIcon();
+        } catch (error) {
+            console.error("Erreur lors de la suppression :", error);
         }
+    };
 
-        console.log("Suppression réussie :", responseDelete);
-
-        // Actualiser la liste des travaux
-        await updateWorks();
-
-        // Actualiser l'affichage dans la modale
-        updateModalPresentation();
-    } catch (error) {
-        console.error("Erreur lors de la suppression :", error);
-    }
+    // Si l'utilisateur annule la suppression
+    cancelDeleteBtn.onclick = function () {
+        confirmationModal.classList.add("hidden");
+        confirmationModal.setAttribute("aria-hidden", "true");
+        console.log("Suppression annulée par l'utilisateur.");
+    };
 };
 
 const addWorkInModal = async function (e){
@@ -245,7 +275,6 @@ const addWorkInModal = async function (e){
         }
 
         console.log("Ajout réussi :", await response.json());
-
         
         // Réinitialiser le champ file
         fileInput.value = "";
@@ -267,9 +296,7 @@ const addWorkInModal = async function (e){
     } catch (error) {
         console.error("Erreur lors de l'ajout :", error);
     }
-    }
-    
-    
+    }   
 };
 
 // Création de la modale
@@ -298,7 +325,6 @@ function clickOnReturnIcon(){
 // Gestion des projets dans la modale Ajout et Suppression
 function clickOnDeleteIcon() {
     modal = document.querySelector(btnModal.getAttribute("href"));
-    console.log(modal.querySelectorAll(".picture .fa-trash-can"));
     modal.querySelectorAll(".picture .fa-trash-can").forEach(i => {
         i.addEventListener("click", deleteWorkInModal);
     })   

@@ -226,7 +226,7 @@ function filterHotelAndRestaurantsFunction() {
     generateWorks(WorksFiltered);
 }
 
-// Filtrer lors du click sur le bouton catégorie
+// Filtrer lors du click sur le bouton d'une catégorie
 function filterAllOnClick(){
     btnFilterAll.addEventListener("click", filterAll);
 }
