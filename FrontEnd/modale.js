@@ -45,8 +45,8 @@ const closeModal = function () {
         previouslyFocusedElement.focus();
     }
     document.getElementById("form-add-photo").reset();
-    modal.querySelector("#drop-container #previewImage").src = "";
-    modal.querySelector("#drop-container #previewImage").classList.add("hidden");
+    modal.querySelector("#drop-container #preview-image").src = "";
+    modal.querySelector("#drop-container #preview-image").classList.add("hidden");
     modal.querySelector("#photo-input-error").classList.add("hidden");
 
     addPhotoBtn = modal.querySelector(".modal-wrapper #add-picture-btn");
@@ -113,7 +113,7 @@ const showAddPhotoModal = function() {
 
 const previewImage = function(e) {
     const input = e.target;
-    const image = document.getElementById("previewImage");
+    const image = document.getElementById("preview-image");
     const fileInput = document.getElementById("photoInput");
     const errorMessage = document.querySelector("#photo-input-error");
     modal = document.querySelector(btnModal.getAttribute("href"));
@@ -144,11 +144,11 @@ const previewImage = function(e) {
         modal.querySelector("#drop-container .fa-image").classList.remove("hidden");
         modal.querySelector("#drop-container .add-image-btn").classList.remove("hidden");
         modal.querySelector("#drop-container .add-image-txt").classList.remove("hidden");
-        modal.querySelector("#drop-container #previewImage").src = "";
-        modal.querySelector("#drop-container #previewImage").classList.add("hidden");
+        modal.querySelector("#drop-container #preview-image").src = "";
+        modal.querySelector("#drop-container #preview-image").classList.add("hidden");
         fileInput.classList.remove("hidden");
     } else {
-        modal.querySelector("#drop-container #previewImage").classList.remove("hidden");
+        modal.querySelector("#drop-container #preview-image").classList.remove("hidden");
         fileInput.classList.add("hidden");
     }
 }
@@ -160,8 +160,8 @@ const showPresentationModal = function() {
     // Réinitialiser le formulaire
     document.getElementById("form-add-photo").reset();
     fileInput.classList.remove("hidden");
-    modal.querySelector("#drop-container #previewImage").src = "";
-    modal.querySelector("#drop-container #previewImage").classList.add("hidden");
+    modal.querySelector("#drop-container #preview-image").src = "";
+    modal.querySelector("#drop-container #preview-image").classList.add("hidden");
     modal.querySelector("#photo-input-error").classList.add("hidden");
 
     
@@ -289,8 +289,8 @@ const addWorkInModal = async function (e){
         
         // Réinitialiser le champ file
         fileInput.value = "";
-        modal.querySelector("#drop-container #previewImage").src = "";
-        modal.querySelector("#drop-container #previewImage").classList.add("hidden");
+        modal.querySelector("#drop-container #preview-image").src = "";
+        modal.querySelector("#drop-container #preview-image").classList.add("hidden");
         modal.querySelector("#drop-container .fa-image").classList.remove("hidden");
         modal.querySelector("#drop-container .add-image-btn").classList.remove("hidden");
         modal.querySelector("#drop-container .add-image-txt").classList.remove("hidden");
