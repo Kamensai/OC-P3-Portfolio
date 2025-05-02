@@ -57,7 +57,7 @@ export function generateWorks(works){
 generateWorks(works);
 
 //  Récupération et affichage des travaux dans la modale
-export function generateWorksInModal(works){
+function generateWorksInModal(works){
     for (let i = 0; i < works.length; i++) {
 
         const figure = works[i];
