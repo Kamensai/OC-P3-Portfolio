@@ -28,14 +28,13 @@ if (token == null) {
     addModifBtn();
 }
 
+let worksAPI = works;
+let categoriesAPI = categories;    
 
+function generateWorks(worksAPI){
+    for (let i = 0; i < worksAPI.length; i++) {
 
-
-
-function generateWorks(works){
-    for (let i = 0; i < works.length; i++) {
-
-        const figure = works[i];
+        const figure = worksAPI[i];
         // Récupération de l'élément du DOM qui accueillera les Projets
         const divGallery = document.querySelector(".gallery");
         // Création d’une balise dédiée à un projet
@@ -53,13 +52,13 @@ function generateWorks(works){
      }
 }
 
-generateWorks(works);
+generateWorks(worksAPI);
 
 //  Récupération et affichage des travaux dans la modale
-function generateWorksInModal(works){
-    for (let i = 0; i < works.length; i++) {
+function generateWorksInModal(worksAPI){
+    for (let i = 0; i < worksAPI.length; i++) {
 
-        const figure = works[i];
+        const figure = worksAPI[i];
         // Récupération de l'élément du DOM qui accueillera les Projets
         const divModalPresentation = document.querySelector("#modal-presentation");
         // Création d’une balise dédiée à un projet
@@ -81,11 +80,11 @@ function generateWorksInModal(works){
      }
 }
 
-generateWorksInModal(works);
+generateWorksInModal(worksAPI);
 
 
 
-function generateCategories(categories){
+function generateCategories(categoriesAPI){
     // Récupération de l'élément du DOM qui accueillera les Catégories
     const divCategories = document.querySelector(".categories");
     const firstBtnNameElement = document.createElement("button");
@@ -96,9 +95,9 @@ function generateCategories(categories){
         firstBtnNameElement.id = "Tous";
         divCategories.appendChild(firstBtnNameElement);  
 
-    for (let i = 0; i < categories.length; i++) {
+    for (let i = 0; i < categoriesAPI.length; i++) {
         
-        const button = categories[i];
+        const button = categoriesAPI[i];
         
         // Création d’une balise dédiée à une catégorie
         const btnNameElement = document.createElement("button");
@@ -111,7 +110,7 @@ function generateCategories(categories){
      }
 }
 
-generateCategories(categories);
+generateCategories(categoriesAPI);
 
 // Mets à jour la liste Works
 export async function updateWorks() {
@@ -124,7 +123,7 @@ export async function updateWorks() {
         const updatedWorks = await responseWorks.json();
 
         // Mettre à jour la variable works
-        works = updatedWorks;  
+        worksAPI = updatedWorks;  
         switch (categoryChosen) {
             case "category-1":
                 filterObjectsFunction();
@@ -140,7 +139,7 @@ export async function updateWorks() {
             }
         
 
-        console.log("Liste des travaux mise à jour :", works);
+        console.log("Liste des travaux mise à jour :", worksAPI);
     } catch (error) {
         console.error("Erreur lors de la mise à jour des travaux :", error);
     }
@@ -150,7 +149,7 @@ export function updateModalPresentation() {
     const modalPresentation = document.querySelector("#modal-presentation");
     if (modalPresentation) {
         modalPresentation.innerHTML = "";
-        generateWorksInModal(works);
+        generateWorksInModal(worksAPI);
     }
 }
 
@@ -196,11 +195,11 @@ const filterHotelAndRestaurants = function () {
 // Function filtres par catégories
 function filterAllFunction(){
     document.querySelector(".gallery").innerHTML = "";
-    generateWorks(works);
+    generateWorks(worksAPI);
 }
 
 function filterObjectsFunction(){
-    const WorksFiltered = works.filter(function (work) {
+    const WorksFiltered = worksAPI.filter(function (work) {
         return work.category.id === 1;
     });
     document.querySelector(".gallery").innerHTML = "";
@@ -208,7 +207,7 @@ function filterObjectsFunction(){
 }
 
 function filterApartmentsFunction() {
-    const WorksFiltered = works.filter(function (work) {
+    const WorksFiltered = worksAPI.filter(function (work) {
         return work.category.id === 2;
     });
     document.querySelector(".gallery").innerHTML = "";
@@ -216,7 +215,7 @@ function filterApartmentsFunction() {
 }
 
 function filterHotelAndRestaurantsFunction() {
-    const WorksFiltered = works.filter(function (work) {
+    const WorksFiltered = worksAPI.filter(function (work) {
         return work.category.id === 3;
     });
     document.querySelector(".gallery").innerHTML = "";
