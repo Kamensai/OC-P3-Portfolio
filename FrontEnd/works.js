@@ -1,3 +1,4 @@
+import {works, categories} from "./worksAPI.js";
 import {createLoginLink, createLogoutBtn, clickLogout} from "./login.js";
 import {initializeModal} from "./modale.js";
 
@@ -29,11 +30,9 @@ if (token == null) {
 
 
 
-// Récupération des projets (works) depuis l'api
-const responseWorks = await fetch("http://localhost:5678/api/works");
-export let works = await responseWorks.json();
 
-export function generateWorks(works){
+
+function generateWorks(works){
     for (let i = 0; i < works.length; i++) {
 
         const figure = works[i];
@@ -57,7 +56,7 @@ export function generateWorks(works){
 generateWorks(works);
 
 //  Récupération et affichage des travaux dans la modale
-export function generateWorksInModal(works){
+function generateWorksInModal(works){
     for (let i = 0; i < works.length; i++) {
 
         const figure = works[i];
@@ -84,9 +83,7 @@ export function generateWorksInModal(works){
 
 generateWorksInModal(works);
 
-// Affichage des catégories
-const responseCategories = await fetch('http://localhost:5678/api/categories');
-const categories = await responseCategories.json();
+
 
 function generateCategories(categories){
     // Récupération de l'élément du DOM qui accueillera les Catégories

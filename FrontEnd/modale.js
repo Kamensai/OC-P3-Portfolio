@@ -1,4 +1,4 @@
-import {generateWorks, generateWorksInModal, token, updateWorks, updateModalPresentation} from "./works.js";
+import {token, updateWorks, updateModalPresentation} from "./works.js";
 
 /*********************************************************************************
  * 

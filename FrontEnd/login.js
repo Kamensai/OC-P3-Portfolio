@@ -4,7 +4,7 @@
  * 
  *********************************************************************************/
 
-async function login() {
+export async function login() {
     
     const formLogin = document.querySelector(".form-login");
     formLogin.addEventListener("submit", async function (event) {
@@ -48,8 +48,6 @@ async function login() {
         
     });
 }
-
-login();
 
 /**
  * Cette fonction prend un body en paramètre et valide la réponse de l'API
