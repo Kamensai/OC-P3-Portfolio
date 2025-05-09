@@ -1,3 +1,5 @@
+import {linkApi} from "./works.js";
+
 /*********************************************************************************
  * 
  * Ce fichier contient toutes les fonctions nécessaires à la connexion de l'utilisateur. 
@@ -27,7 +29,7 @@ async function login() {
             const chargeUtile = JSON.stringify(connexion);
 
             // Appel de la fonction fetch avec toutes les informations
-            const responseLogin = await fetch("http://localhost:5678/api/users/login", {
+            const responseLogin = await fetch(`${linkApi}users/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: chargeUtile

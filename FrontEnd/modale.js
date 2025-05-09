@@ -1,4 +1,4 @@
-import {token, updateWorks, updateModalPresentation} from "./works.js";
+import {token, updateWorks, updateModalPresentation, linkApi} from "./works.js";
 
 /*********************************************************************************
  * 
@@ -211,7 +211,7 @@ const deleteWorkInModal = async function (e){
         confirmationModal.setAttribute("aria-hidden", "true");
 
         const valueToken = JSON.parse(token);
-        const urlAPI = `http://localhost:5678/api/works/${pictureId}`;
+        const urlAPI = `${linkApi}works/${pictureId}`;
 
         try {
             // Supprimer l'objet côté backend

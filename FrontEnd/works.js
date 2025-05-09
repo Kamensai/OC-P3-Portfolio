@@ -13,6 +13,7 @@ export let token = window.localStorage.getItem("token");
 let modifBtn = document.getElementById("modif-link");
 modifBtn.style.display = "none";
 let categoryChosen = "Tous";
+export const linkApi = "http://localhost:5678/api/";
 
 if (token == null) {
     // Create Login link
@@ -30,7 +31,7 @@ if (token == null) {
 
 
 // Récupération des projets (works) depuis l'api
-const responseWorks = await fetch("http://localhost:5678/api/works");
+const responseWorks = await fetch(`${linkApi}works`);
 export let works = await responseWorks.json();
 
 export function generateWorks(works){
@@ -85,7 +86,7 @@ function generateWorksInModal(works){
 generateWorksInModal(works);
 
 // Affichage des catégories
-const responseCategories = await fetch('http://localhost:5678/api/categories');
+const responseCategories = await fetch(`${linkApi}categories`);
 const categories = await responseCategories.json();
 
 function generateCategories(categories){
@@ -120,7 +121,7 @@ generateCategories(categories);
 export async function updateWorks() {
     try {
         // Récupérer les données mises à jour depuis le backend
-        const responseWorks = await fetch("http://localhost:5678/api/works");
+        const responseWorks = await fetch(`${linkApi}works`);
         if (!responseWorks.ok) {
             throw new Error("Erreur lors de la récupération des travaux.");
         }
