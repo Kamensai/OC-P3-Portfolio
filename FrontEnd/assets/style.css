@@ -121,6 +121,7 @@ nav li {
 nav a {
 	text-decoration: none;
 	color: black;
+	cursor: pointer;
 }
 
 li a:hover {
@@ -224,6 +225,7 @@ li a:hover {
 	border-radius: 25px 25px 25px 25px;
 	border: 1px solid var(--main-color);
 	padding: 5px 15px 5px 15px;
+	cursor: pointer;
 }
 
 .categories button:hover {
@@ -541,6 +543,7 @@ footer nav ul {
 	text-align: center;
 	border: 1px solid var(--main-color);
 	border-radius: 60px ;
+	cursor: pointer;
 }
 
 /* Appliquer un box-shadow à tous les éléments focusables dans la modale */
