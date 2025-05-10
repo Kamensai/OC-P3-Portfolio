@@ -15,7 +15,8 @@ modifBtn.style.display = "none";
 let categoryChosen = "Tous";
 export const linkApi = "http://localhost:5678/api/";
 
-if (token == null) {
+export function tokenExist() {
+    if (token == null) {
     // Create Login link
     createLoginLink();
 } else {
@@ -27,8 +28,9 @@ if (token == null) {
     // Création de l'icone de modification des projets
     addModifBtn();
 }
+}
 
-
+tokenExist();
 
 // Récupération des projets (works) depuis l'api
 const responseWorks = await fetch(`${linkApi}works`);
@@ -259,4 +261,29 @@ function addModifBtn(){
     // déplacer le titre au centre
     document.getElementById("title-project").style.marginLeft = "100px" ;
     
+}
+
+// Function to show the custom alert
+export function showCustomAlertToken(message) {
+  const alertBox = document.getElementById("custom-alert");
+  const alertMessage = document.getElementById("alert-message");
+  const alertOkBtn = document.getElementById("alert-ok-btn");
+
+  // Set the message
+  alertMessage.textContent = message;
+
+  // Show the alert box
+  alertBox.classList.remove("hidden");
+
+  // Add an event listener to the OK button
+  alertOkBtn.addEventListener("click", function handleOkClick() {
+    // Hide the alert box
+    alertBox.classList.add("hidden");
+
+    // Remove the event listener to avoid duplicate handlers
+    alertOkBtn.removeEventListener("click", handleOkClick);
+
+    window.localStorage.removeItem("token");
+    document.location.href = "login.html";
+  });
 }

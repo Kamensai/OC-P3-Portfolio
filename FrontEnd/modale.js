@@ -1,4 +1,4 @@
-import {token, updateWorks, updateModalPresentation, linkApi} from "./works.js";
+import {token, updateWorks, updateModalPresentation, linkApi, showCustomAlertToken, tokenExist} from "./works.js";
 
 /*********************************************************************************
  * 
@@ -222,6 +222,11 @@ const deleteWorkInModal = async function (e){
                     'Content-Type': '*/*'
                 })
             });
+
+            if (responseDelete.status == 401) {
+                showCustomAlertToken("Session expirée. Veuillez vous reconnecter.");
+                throw new Error("Connexion non autorisée.");
+            }
 
             if (!responseDelete.ok) {
                 throw new Error("Erreur lors de la suppression du projet.");
