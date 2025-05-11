@@ -401,3 +401,33 @@ const trapFocusInModal = function (e) {
     }
     focusablesElements[index].focus();
 }
+
+// Vérification de la taille de l'image téléchargée
+function validateImageSize(event) {
+    const fileInput = event.target;
+    const errorMessage = document.querySelector("#photo-input-error");
+
+    // Vérifier si un fichier a été sélectionné
+    if (fileInput.files && fileInput.files[0]) {
+        const fileSizeInMB = fileInput.files[0].size / (1024 * 1024); // Convertir la taille en Mo
+
+        if (fileSizeInMB > 4) {
+            // Afficher un message d'erreur si la taille dépasse 4 Mo
+            errorMessage.textContent = "L'image ne doit pas dépasser 4 Mo.";
+            errorMessage.classList.remove("hidden");
+            fileInput.value = ""; // Réinitialiser le champ de fichier
+        } else {
+            // Réinitialiser le message d'erreur si la taille est correcte
+            errorMessage.textContent = "";
+            errorMessage.classList.add("hidden");
+        }
+    }
+}
+
+// Ajouter un écouteur d'événement sur le champ de téléchargement d'image
+const imageInputEl = document.getElementById("photoInput");
+if (imageInputEl) {
+    imageInputEl.addEventListener("change", validateImageSize);
+} else {
+    console.error("L'élément avec l'ID 'photoInput' est introuvable.");
+}
