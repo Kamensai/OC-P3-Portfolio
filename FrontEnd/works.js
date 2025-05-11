@@ -44,7 +44,10 @@ export function generateWorks(works){
         const divGallery = document.querySelector(".gallery");
         // Création d’une balise dédiée à un projet
         const workElement = document.createElement("figure");
-        // Création des balises 
+        workElement.dataset.id = figure.id;
+        workElement.dataset.category = figure.category.id;
+
+        // Création des balises dans le projet
         const imageElement = document.createElement("img");
         imageElement.src = figure.imageUrl;
         const titleElement = document.createElement("figcaption");
@@ -97,10 +100,13 @@ function generateCategories(categories){
     const firstBtnNameElement = document.createElement("button");
 
     //Création de la Catégorie "Tous"
-        firstBtnNameElement.innerText = "Tous";
-        firstBtnNameElement.classList.add("btnClicked");
-        firstBtnNameElement.id = "Tous";
-        divCategories.appendChild(firstBtnNameElement);  
+    firstBtnNameElement.innerText = "Tous";
+    firstBtnNameElement.classList.add("btnClicked");
+    firstBtnNameElement.dataset.id = "Tous";
+    //Ajour AddEventlistener au click sur le bouton
+    btnClicked(firstBtnNameElement);
+    // On rattache la balise bouton "Tous" à la section Catégories
+    divCategories.appendChild(firstBtnNameElement);  
 
     for (let i = 0; i < categories.length; i++) {
         
@@ -109,10 +115,12 @@ function generateCategories(categories){
         // Création d’une balise dédiée à une catégorie
         const btnNameElement = document.createElement("button");
         btnNameElement.innerText = button.name;
-        btnNameElement.classList.add("btnUnClicked");
         btnNameElement.id = "category-" + button.id;
+        btnNameElement.dataset.id = button.id;
+
+        btnClicked(btnNameElement);
         
-        // On rattache la balise figure à la section Catégories
+        // On rattache la balise bouton à la section Catégories
         divCategories.appendChild(btnNameElement);
      }
 }
@@ -131,21 +139,10 @@ export async function updateWorks() {
 
         // Mettre à jour la variable works
         works = updatedWorks;  
-        switch (categoryChosen) {
-            case "category-1":
-                filterObjectsFunction();
-                break;
-            case "category-2":
-                filterApartmentsFunction();
-                break;
-            case "category-3":
-                filterHotelAndRestaurantsFunction();
-                break;
-            default:
-                filterAllFunction();
-            }
+        document.querySelector(".gallery").innerHTML = "";
+        generateWorks(works);
+        filterWorksbyCategory(categoryChosen);
         
-
         console.log("Liste des travaux mise à jour :", works);
     } catch (error) {
         console.error("Erreur lors de la mise à jour des travaux :", error);
@@ -156,104 +153,37 @@ export function updateModalPresentation() {
     const modalPresentation = document.querySelector("#modal-presentation");
     if (modalPresentation) {
         modalPresentation.innerHTML = "";
-        generateWorksInModal(works);
+        generateWorksInModal(works);        
     }
 }
 
-// Filtrer au click sur une catégorie
-const btnList = document.querySelectorAll(".categories button");
-const btnFilterAll = document.querySelector("#Tous");
-const btnFilterObjects = document.querySelector(".categories #category-1");
-const btnFilterApartments = document.querySelector(".categories #category-2");
-const btnFilterHotelsAndRestaurants = document.querySelector(".categories #category-3");
-
-btnList.forEach(btn => {
+function btnClicked(btn) {
     btn.addEventListener("click", () => {
         document.querySelector(".btnClicked")?.classList.remove("btnClicked");
-        document.querySelector(".categories button").classList.add("btnUnClicked");
         btn.classList.add("btnClicked");
+        categoryChosen = btn.dataset.id;
+        console.log(categoryChosen);
+        filterWorksbyCategory(categoryChosen);
     })
-})
-
-const filterAll = function () {
-    categoryChosen = "Tous";
-    console.log(categoryChosen);
-    filterAllFunction();
 }
 
-const filterObjects = function () {
-    categoryChosen = "category-1";
-    console.log(categoryChosen);
-    filterObjectsFunction();
-}
-
-const filterApartments = function () {
-    categoryChosen = "category-2";
-    console.log(categoryChosen);
-    filterApartmentsFunction();
-}
-
-const filterHotelAndRestaurants = function () {
-    categoryChosen = "category-3";
-    console.log(categoryChosen);
-    filterHotelAndRestaurantsFunction();
-}
-
-// Function filtres par catégories
-function filterAllFunction(){
-    document.querySelector(".gallery").innerHTML = "";
-    generateWorks(works);
-}
-
-function filterObjectsFunction(){
-    const WorksFiltered = works.filter(function (work) {
-        return work.category.id === 1;
-    });
-    document.querySelector(".gallery").innerHTML = "";
-    generateWorks(WorksFiltered);
-}
-
-function filterApartmentsFunction() {
-    const WorksFiltered = works.filter(function (work) {
-        return work.category.id === 2;
-    });
-    document.querySelector(".gallery").innerHTML = "";
-    generateWorks(WorksFiltered);
-}
-
-function filterHotelAndRestaurantsFunction() {
-    const WorksFiltered = works.filter(function (work) {
-        return work.category.id === 3;
-    });
-    document.querySelector(".gallery").innerHTML = "";
-    generateWorks(WorksFiltered);
-}
-
-// Filtrer lors du click sur le bouton d'une catégorie
-function filterAllOnClick(){
-    btnFilterAll.addEventListener("click", filterAll);
-}
-
-function filterObjectsOnClick(){
-    btnFilterObjects.addEventListener("click", filterObjects);
-}
-
-function filterApartmentsOnClick() {
-    btnFilterApartments.addEventListener("click", filterApartments);
-}
-
-function filterHotelAndRestaurantsOnClick() {
-    btnFilterHotelsAndRestaurants.addEventListener("click", filterHotelAndRestaurants);
-}
-
+function filterWorksbyCategory(categoryChosen){
+    const listWorks = document.querySelectorAll(".gallery figure");
+    if (categoryChosen === "Tous") {
+        listWorks.forEach(work => work.classList.remove("hidden"));
+    } else {
+        listWorks.forEach(work => {
+            if (work.dataset.category !== categoryChosen && work.classList.contains("hidden") == false) {
+                work.classList.add("hidden");
+            } else if (work.dataset.category === categoryChosen && work.classList.contains("hidden") == true) {
+                work.classList.remove("hidden");
+            }
+        })
+    }
+} 
 
 //  Création de la modale
 initializeModal();
-
-filterAllOnClick();
-filterObjectsOnClick();
-filterApartmentsOnClick();
-filterHotelAndRestaurantsOnClick();
 
 function addModifBtn(){
     modifBtn.style.display = null;

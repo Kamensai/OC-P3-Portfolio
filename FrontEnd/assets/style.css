@@ -192,6 +192,9 @@ li a:hover {
 #modal-add-photo.hidden {
 	display: none;
 }
+.gallery.hidden {
+	display: none;
+}
 
 .hidden {
 	display: none;
@@ -226,18 +229,19 @@ li a:hover {
 	border: 1px solid var(--main-color);
 	padding: 5px 15px 5px 15px;
 	cursor: pointer;
+	background-color: var(--btn-bg-color);
+	color :var(--main-color);
 }
 
 .categories button:hover {
 	background-color: var(--btn-hv-color);
 	color: var(--btn-bg-color);
 }
-
+/*
 .btnUnClicked {
-	background-color: var(--btn-bg-color);
-	color :var(--main-color);
-}
-.btnClicked {
+	
+}*/
+.categories .btnClicked {
 	background-color: var(--main-color);
 	color: var(--btn-bg-color);
 }
