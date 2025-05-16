@@ -1,6 +1,7 @@
 import {createLoginLink, createLogoutBtn, clickLogout} from "./login.js";
 import {initializeModal} from "./modale.js";
 import {linkApi} from "./const.js";
+import {works, categories} from "./worksAPI.js";
 
 /*********************************************************************************
  * 
@@ -33,8 +34,8 @@ export function tokenExist() {
 tokenExist();
 
 // Récupération des projets (works) depuis l'api
-const responseWorks = await fetch(`${linkApi}works`);
-export let works = await responseWorks.json();
+/*const responseWorks = await fetch(`${linkApi}works`);
+export let works = await responseWorks.json(); */
 
 export function generateWorks(works){
     for (let i = 0; i < works.length; i++) {
@@ -91,8 +92,8 @@ function generateWorksInModal(works){
 generateWorksInModal(works);
 
 // Affichage des catégories
-const responseCategories = await fetch(`${linkApi}categories`);
-const categories = await responseCategories.json();
+/*const responseCategories = await fetch(`${linkApi}categories`);
+const categories = await responseCategories.json(); */
 
 function generateCategories(categories){
     // Récupération de l'élément du DOM qui accueillera les Catégories

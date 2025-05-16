@@ -6,7 +6,7 @@ import {linkApi} from "./const.js";
  * 
  *********************************************************************************/
 
-async function login() {
+export async function login() {
     
     const formLogin = document.querySelector(".form-login");
     formLogin.addEventListener("submit", async function (event) {
@@ -28,7 +28,6 @@ async function login() {
             // Création de la charge utile au format JSON
             const chargeUtile = JSON.stringify(connexion);
 
-            // TODO : Utiliser la variable linkApi à importer (Déjà fait mais ça fait buguer la connexion : Erreur 405)
             // Appel de la fonction fetch avec toutes les informations
             const responseLogin = await fetch(`${linkApi}users/login`, {
                 method: "POST",
@@ -51,8 +50,6 @@ async function login() {
         
     });
 }
-
-login();
 
 /**
  * Cette fonction prend un body en paramètre et valide la réponse de l'API
