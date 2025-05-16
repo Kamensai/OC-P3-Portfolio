@@ -1,5 +1,6 @@
 import {createLoginLink, createLogoutBtn, clickLogout} from "./login.js";
 import {initializeModal} from "./modale.js";
+import {linkApi} from "./const.js";
 
 /*********************************************************************************
  * 
@@ -13,21 +14,20 @@ export let token = window.localStorage.getItem("token");
 let modifBtn = document.getElementById("modif-link");
 modifBtn.style.display = "none";
 let categoryChosen = "Tous";
-export const linkApi = "http://localhost:5678/api/";
 
 export function tokenExist() {
     if (token == null) {
     // Create Login link
     createLoginLink();
-} else {
-    const valueToken = JSON.parse(token);
-    console.log("ValueToken : " + valueToken);
-    // Create Logout button
-    createLogoutBtn();
-    clickLogout();
-    // Création de l'icone de modification des projets
-    addModifBtn();
-}
+    } else {
+        const valueToken = JSON.parse(token);
+        console.log("ValueToken : " + valueToken);
+        // Create Logout button
+        createLogoutBtn();
+        clickLogout();
+        // Création de l'icone de modification des projets
+        addModifBtn();
+    }
 }
 
 tokenExist();

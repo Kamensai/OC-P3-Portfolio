@@ -1,0 +1,1 @@
+export const linkApi = "http://localhost:5678/api/";

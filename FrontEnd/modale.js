@@ -1,4 +1,5 @@
-import {token, updateWorks, updateModalPresentation, linkApi, showCustomAlertToken, tokenExist} from "./works.js";
+import {token, updateWorks, updateModalPresentation, showCustomAlertToken} from "./works.js";
+import {linkApi} from "./const.js";
 
 /*********************************************************************************
  * 
