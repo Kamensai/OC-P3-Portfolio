@@ -1,5 +1,7 @@
 import {createLoginLink, createLogoutBtn, clickLogout} from "./login.js";
 import {initializeModal} from "./modale.js";
+import {linkApi, token} from "./const.js";
+import {works as initialWorks, categories} from "./worksAPI.js";
 
 /*********************************************************************************
  * 
@@ -7,41 +9,53 @@ import {initializeModal} from "./modale.js";
  * 
  *********************************************************************************/
 
-//Récupération du token stockés dans le localStorage
-export let token = window.localStorage.getItem("token");
-// Cache le lien "modifier" si l'utilisateur n'est pas connecté
+// Cache le bouton "modifier" si l'utilisateur n'est pas connecté
 let modifBtn = document.getElementById("modif-link");
 modifBtn.style.display = "none";
 let categoryChosen = "Tous";
+let currentWorks = initialWorks;
 
-if (token == null) {
-    // Create Login link
-    createLoginLink();
-} else {
-    const valueToken = JSON.parse(token);
-    console.log("ValueToken : " + valueToken);
-    // Create Logout button
-    createLogoutBtn();
-    clickLogout();
-    // Création de l'icone de modification des projets
-    addModifBtn();
+function tokenExist() {
+    if (token == null) {
+        // Create Login link
+        createLoginLink();
+        // Affichage des projets (works)
+        generateWorks(currentWorks);
+        // Affichage des catégories
+        generateCategories(categories);
+    } else {
+        const valueToken = JSON.parse(token);
+        // Create Logout button
+        createLogoutBtn();
+        clickLogout();
+        // Création de l'icone de modification des projets
+        addModifBtn();
+        //  Création de la modale
+        initializeModal();
+        // Affichage des projets (works)
+        generateWorks(currentWorks);
+        // Affichage des catégories
+        generateCategories(categories);
+        // Affichage des travaux dans la modale
+        generateWorksInModal(currentWorks);
+    }
 }
 
+tokenExist();
 
+// Affichage des projets (works)
+export function generateWorks(currentWorks){
+    for (let i = 0; i < currentWorks.length; i++) {
 
-// Récupération des projets (works) depuis l'api
-const responseWorks = await fetch("http://localhost:5678/api/works");
-export let works = await responseWorks.json();
-
-export function generateWorks(works){
-    for (let i = 0; i < works.length; i++) {
-
-        const figure = works[i];
+        const figure = currentWorks[i];
         // Récupération de l'élément du DOM qui accueillera les Projets
         const divGallery = document.querySelector(".gallery");
         // Création d’une balise dédiée à un projet
         const workElement = document.createElement("figure");
-        // Création des balises 
+        workElement.dataset.id = figure.id;
+        workElement.dataset.category = figure.category.id;
+
+        // Création des balises dans le projet
         const imageElement = document.createElement("img");
         imageElement.src = figure.imageUrl;
         const titleElement = document.createElement("figcaption");
@@ -54,13 +68,12 @@ export function generateWorks(works){
      }
 }
 
-generateWorks(works);
 
-//  Récupération et affichage des travaux dans la modale
-function generateWorksInModal(works){
-    for (let i = 0; i < works.length; i++) {
+//  Affichage des travaux dans la modale
+function generateWorksInModal(currentWorks){
+    for (let i = 0; i < currentWorks.length; i++) {
 
-        const figure = works[i];
+        const figure = currentWorks[i];
         // Récupération de l'élément du DOM qui accueillera les Projets
         const divModalPresentation = document.querySelector("#modal-presentation");
         // Création d’une balise dédiée à un projet
@@ -82,22 +95,20 @@ function generateWorksInModal(works){
      }
 }
 
-generateWorksInModal(works);
-
 // Affichage des catégories
-const responseCategories = await fetch('http://localhost:5678/api/categories');
-const categories = await responseCategories.json();
-
 function generateCategories(categories){
     // Récupération de l'élément du DOM qui accueillera les Catégories
     const divCategories = document.querySelector(".categories");
     const firstBtnNameElement = document.createElement("button");
 
     //Création de la Catégorie "Tous"
-        firstBtnNameElement.innerText = "Tous";
-        firstBtnNameElement.classList.add("btnClicked");
-        firstBtnNameElement.id = "Tous";
-        divCategories.appendChild(firstBtnNameElement);  
+    firstBtnNameElement.innerText = "Tous";
+    firstBtnNameElement.classList.add("btnClicked");
+    firstBtnNameElement.dataset.id = "Tous";
+    //Ajour AddEventlistener au click sur le bouton
+    btnClicked(firstBtnNameElement);
+    // On rattache la balise bouton "Tous" à la section Catégories
+    divCategories.appendChild(firstBtnNameElement);  
 
     for (let i = 0; i < categories.length; i++) {
         
@@ -106,44 +117,31 @@ function generateCategories(categories){
         // Création d’une balise dédiée à une catégorie
         const btnNameElement = document.createElement("button");
         btnNameElement.innerText = button.name;
-        btnNameElement.classList.add("btnUnClicked");
         btnNameElement.id = "category-" + button.id;
+        btnNameElement.dataset.id = button.id;
+
+        btnClicked(btnNameElement);
         
-        // On rattache la balise figure à la section Catégories
+        // On rattache la balise bouton à la section Catégories
         divCategories.appendChild(btnNameElement);
      }
 }
-
-generateCategories(categories);
 
 // Mets à jour la liste Works
 export async function updateWorks() {
     try {
         // Récupérer les données mises à jour depuis le backend
-        const responseWorks = await fetch("http://localhost:5678/api/works");
+        const responseWorks = await fetch(`${linkApi}works`);
         if (!responseWorks.ok) {
             throw new Error("Erreur lors de la récupération des travaux.");
         }
         const updatedWorks = await responseWorks.json();
 
         // Mettre à jour la variable works
-        works = updatedWorks;  
-        switch (categoryChosen) {
-            case "category-1":
-                filterObjectsFunction();
-                break;
-            case "category-2":
-                filterApartmentsFunction();
-                break;
-            case "category-3":
-                filterHotelAndRestaurantsFunction();
-                break;
-            default:
-                filterAllFunction();
-            }
-        
-
-        console.log("Liste des travaux mise à jour :", works);
+        currentWorks = updatedWorks;  
+        document.querySelector(".gallery").innerHTML = "";
+        generateWorks(currentWorks);
+        filterWorksbyCategory(categoryChosen);
     } catch (error) {
         console.error("Erreur lors de la mise à jour des travaux :", error);
     }
@@ -153,109 +151,64 @@ export function updateModalPresentation() {
     const modalPresentation = document.querySelector("#modal-presentation");
     if (modalPresentation) {
         modalPresentation.innerHTML = "";
-        generateWorksInModal(works);
+        generateWorksInModal(currentWorks);        
     }
 }
 
-// Filtrer au click sur une catégorie
-const btnList = document.querySelectorAll(".categories button");
-const btnFilterAll = document.querySelector("#Tous");
-const btnFilterObjects = document.querySelector(".categories #category-1");
-const btnFilterApartments = document.querySelector(".categories #category-2");
-const btnFilterHotelsAndRestaurants = document.querySelector(".categories #category-3");
-
-btnList.forEach(btn => {
+function btnClicked(btn) {
     btn.addEventListener("click", () => {
         document.querySelector(".btnClicked")?.classList.remove("btnClicked");
-        document.querySelector(".categories button").classList.add("btnUnClicked");
         btn.classList.add("btnClicked");
+        categoryChosen = btn.dataset.id;
+        filterWorksbyCategory(categoryChosen);
     })
-})
-
-const filterAll = function () {
-    categoryChosen = "Tous";
-    console.log(categoryChosen);
-    filterAllFunction();
 }
 
-const filterObjects = function () {
-    categoryChosen = "category-1";
-    console.log(categoryChosen);
-    filterObjectsFunction();
-}
+function filterWorksbyCategory(categoryChosen){
+    const listWorks = document.querySelectorAll(".gallery figure");
+    if (categoryChosen === "Tous") {
+        listWorks.forEach(work => work.classList.remove("hidden"));
+    } else {
+        listWorks.forEach(work => {
+            if (work.dataset.category !== categoryChosen && work.classList.contains("hidden") == false) {
+                work.classList.add("hidden");
+            } else if (work.dataset.category === categoryChosen && work.classList.contains("hidden") == true) {
+                work.classList.remove("hidden");
+            }
+        })
+    }
+} 
 
-const filterApartments = function () {
-    categoryChosen = "category-2";
-    console.log(categoryChosen);
-    filterApartmentsFunction();
-}
-
-const filterHotelAndRestaurants = function () {
-    categoryChosen = "category-3";
-    console.log(categoryChosen);
-    filterHotelAndRestaurantsFunction();
-}
-
-// Function filtres par catégories
-function filterAllFunction(){
-    document.querySelector(".gallery").innerHTML = "";
-    generateWorks(works);
-}
-
-function filterObjectsFunction(){
-    const WorksFiltered = works.filter(function (work) {
-        return work.category.id === 1;
-    });
-    document.querySelector(".gallery").innerHTML = "";
-    generateWorks(WorksFiltered);
-}
-
-function filterApartmentsFunction() {
-    const WorksFiltered = works.filter(function (work) {
-        return work.category.id === 2;
-    });
-    document.querySelector(".gallery").innerHTML = "";
-    generateWorks(WorksFiltered);
-}
-
-function filterHotelAndRestaurantsFunction() {
-    const WorksFiltered = works.filter(function (work) {
-        return work.category.id === 3;
-    });
-    document.querySelector(".gallery").innerHTML = "";
-    generateWorks(WorksFiltered);
-}
-
-// Filtrer lors du click sur le bouton d'une catégorie
-function filterAllOnClick(){
-    btnFilterAll.addEventListener("click", filterAll);
-}
-
-function filterObjectsOnClick(){
-    btnFilterObjects.addEventListener("click", filterObjects);
-}
-
-function filterApartmentsOnClick() {
-    btnFilterApartments.addEventListener("click", filterApartments);
-}
-
-function filterHotelAndRestaurantsOnClick() {
-    btnFilterHotelsAndRestaurants.addEventListener("click", filterHotelAndRestaurants);
-}
-
-
-//  Création de la modale
-initializeModal();
-
-filterAllOnClick();
-filterObjectsOnClick();
-filterApartmentsOnClick();
-filterHotelAndRestaurantsOnClick();
-
+// Ajoute le bouton "modifier" si l'utilisateur est connecté
 function addModifBtn(){
     modifBtn.style.display = null;
 
     // déplacer le titre au centre
     document.getElementById("title-project").style.marginLeft = "100px" ;
     
+}
+
+// Affiche le custom alert si le token est expiré
+export function showCustomAlertToken(message) {
+    const alertBox = document.getElementById("custom-alert");
+    const alertMessage = document.getElementById("alert-message");
+    const alertOkBtn = document.getElementById("alert-ok-btn");
+
+    // Set the message
+    alertMessage.textContent = message;
+
+    // Show the alert box
+    alertBox.classList.remove("hidden");
+
+    // Add an event listener to the OK button
+    alertOkBtn.addEventListener("click", function handleOkClick() {
+        // Hide the alert box
+        alertBox.classList.add("hidden");
+
+        // Remove the event listener to avoid duplicate handlers
+        alertOkBtn.removeEventListener("click", handleOkClick);
+
+        window.localStorage.removeItem("token");
+        document.location.href = "login.html";
+  });
 }

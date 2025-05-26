@@ -1,10 +1,12 @@
+import {linkApi} from "./const.js";
+
 /*********************************************************************************
  * 
  * Ce fichier contient toutes les fonctions nécessaires à la connexion de l'utilisateur. 
  * 
  *********************************************************************************/
 
-async function login() {
+export async function login() {
     
     const formLogin = document.querySelector(".form-login");
     formLogin.addEventListener("submit", async function (event) {
@@ -21,18 +23,15 @@ async function login() {
                 email: email,
                 password: password,
             };
-            console.log(email);
-            console.log(password);
             // Création de la charge utile au format JSON
             const chargeUtile = JSON.stringify(connexion);
 
             // Appel de la fonction fetch avec toutes les informations
-            const responseLogin = await fetch("http://localhost:5678/api/users/login", {
+            const responseLogin = await fetch(`${linkApi}users/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: chargeUtile
             });
-            console.log(responseLogin);
             validateLogin(responseLogin);
             const login = await responseLogin.json();
             // Vérification de l'email et du mot de passe côté backend pour la connexion
@@ -43,13 +42,10 @@ async function login() {
             
         } catch (error) {
             alert("Une erreur est survenue : " + error.message);
-            console.log("Une erreur est survenue : " + error.message);
         }
         
     });
 }
-
-login();
 
 /**
  * Cette fonction prend un body en paramètre et valide la réponse de l'API
@@ -58,7 +54,6 @@ login();
  */
 // Vérification de l'email et du mot de passe pour la connexion : Réponse attendure TRUE (200)
 function validateLogin(responseLogin) {
-    console.log(responseLogin);
     if(!responseLogin.ok){
         throw new Error("Erreur dans l’identifiant ou le mot de passe.");
     }   
@@ -91,11 +86,8 @@ function validatePassword(password) {
 function setTokenInLocalStorage(login){
     const token = login.token;
     const valueToken = JSON.stringify(token);
-    console.log("strungify valueToken : "+ valueToken);
     window.localStorage.setItem("token", valueToken);
 }
-
-
 
 // Create login link
 export function createLoginLink(){
