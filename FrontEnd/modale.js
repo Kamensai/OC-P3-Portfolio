@@ -1,30 +1,26 @@
-import {token, updateWorks, updateModalPresentation, showCustomAlertToken} from "./works.js";
-import {linkApi} from "./const.js";
+import {updateWorks, updateModalPresentation, showCustomAlertToken} from "./works.js";
+import {linkApi, token} from "./const.js";
 
 /*********************************************************************************
  * 
  * Ce fichier contient toutes les fonctions nécessaires à l'utilisation de la modale. 
  * 
  *********************************************************************************/
-
-let modal = null;
-let addPhotoBtn = null;
-let validPhotoBtn = null;
-let returnIcon = null;
-const btnModal = document.querySelector(".js-modal");
-let focusablesElements =[];
 let previouslyFocusedElement = null;
+const btnModal = document.querySelector(".js-modal");
+const modal = document.querySelector(btnModal.getAttribute("href"));
+const addPhotoBtn = modal.querySelector(".modal-wrapper #add-picture-btn");
+const validPhotoBtn = modal.querySelector(".modal-wrapper #valid-picture-btn");
+const returnIcon = modal.querySelector("#modal-top .fa-arrow-left");
 
 
 const openModal = function () {
-    modal = document.querySelector(btnModal.getAttribute("href"));
     //stock l'élément focus avant la création de la modale
     previouslyFocusedElement = document.querySelector(":focus");
 
     // Afficher la modale
     modal.classList.remove("hidden");
     modal.querySelector("#modal-presentation").classList.remove("hidden");
-    addPhotoBtn = modal.querySelector(".modal-wrapper #add-picture-btn");
     addPhotoBtn.classList.remove("hidden");
 
     // Configurer les attributs d'accessibilité
@@ -49,10 +45,6 @@ const closeModal = function () {
     modal.querySelector("#drop-container #preview-image").src = "";
     modal.querySelector("#drop-container #preview-image").classList.add("hidden");
     modal.querySelector("#photo-input-error").classList.add("hidden");
-
-    addPhotoBtn = modal.querySelector(".modal-wrapper #add-picture-btn");
-    validPhotoBtn = modal.querySelector(".modal-wrapper #valid-picture-btn");
-    returnIcon = modal.querySelector("#modal-top .fa-arrow-left");
     
     modal.setAttribute("aria-hidden", true);
     modal.removeAttribute("aria-modal");
@@ -87,7 +79,6 @@ const stopPropagation = function (e){
 }
 
 const showAddPhotoModal = function() {
-    modal = document.querySelector(btnModal.getAttribute("href"));
     modal.querySelector("#title-modal").innerHTML = "Ajout photo";
     // Affiche la vue de modale pour ajouter un projet "work"
     modal.querySelector("#modal-presentation").classList.add("hidden");
@@ -99,10 +90,6 @@ const showAddPhotoModal = function() {
     modal.querySelector("#drop-container .add-image-txt").classList.remove("hidden");
 
     // Affiche le bouton retour et le bouton valider Et cache le bouton "ajouter Photo"
-    addPhotoBtn = modal.querySelector(".modal-wrapper #add-picture-btn");
-    validPhotoBtn = modal.querySelector(".modal-wrapper #valid-picture-btn");
-    returnIcon = modal.querySelector("#modal-top .fa-arrow-left");
-
     returnIcon.classList.remove("hidden");
     addPhotoBtn.classList.add("hidden");
     validPhotoBtn.classList.remove("hidden");
@@ -117,10 +104,6 @@ const previewImage = function(e) {
     const image = document.getElementById("preview-image");
     const fileInput = document.getElementById("photoInput");
     const errorMessage = document.querySelector("#photo-input-error");
-    modal = document.querySelector(btnModal.getAttribute("href"));
-    
-
-    console.log(input.files);
 
     if (input.files && input.files[0]) {
         // Cache les éléments de #drop-container pour ajouter une photo
@@ -156,7 +139,6 @@ const previewImage = function(e) {
 
 
 const showPresentationModal = function() {
-    modal = document.querySelector(btnModal.getAttribute("href"));
     const fileInput = document.getElementById("photoInput");
     // Réinitialiser le formulaire
     document.getElementById("form-add-photo").reset();
@@ -170,12 +152,9 @@ const showPresentationModal = function() {
     modal.querySelector("#modal-add-photo").classList.add("hidden");
     modal.querySelector("#modal-presentation").classList.remove("hidden");
 
-    addPhotoBtn = modal.querySelector(".modal-wrapper #add-picture-btn");
-    validPhotoBtn = modal.querySelector(".modal-wrapper #valid-picture-btn");
     validPhotoBtn.classList.add("hidden");
     addPhotoBtn.classList.remove("hidden");
 
-    returnIcon = modal.querySelector("#modal-top .fa-arrow-left");
     returnIcon.classList.add("hidden");
     clickOnDeleteIcon();
 }
@@ -183,19 +162,10 @@ const showPresentationModal = function() {
 const deleteWorkInModal = async function (e){
     e.preventDefault();
     const pictureId = e.target.id;
-    console.log(pictureId);
     if (!pictureId) {
         console.error("L'ID de l'image n'a pas été trouvé.");
         return;
     }
-
-    // Afficher une boîte de confirmation
-    /*const confirmation = window.confirm("Êtes-vous sûr de vouloir supprimer ce projet ?");
-    if (!confirmation) {
-        console.log("Suppression annulée par l'utilisateur.");
-        return; // Annuler la suppression si l'utilisateur clique sur "Annuler"
-    }
-        */
 
     // Afficher la modale de confirmation
     const confirmationModal = document.getElementById("confirmation-modal");
@@ -233,8 +203,6 @@ const deleteWorkInModal = async function (e){
                 throw new Error("Erreur lors de la suppression du projet.");
             }
 
-            console.log("Suppression réussie :", responseDelete);
-
             // Actualiser la liste des travaux
             await updateWorks();
 
@@ -250,25 +218,20 @@ const deleteWorkInModal = async function (e){
     cancelDeleteBtn.onclick = function () {
         confirmationModal.classList.add("hidden");
         confirmationModal.setAttribute("aria-hidden", "true");
-        console.log("Suppression annulée par l'utilisateur.");
     };
 };
 
 const addWorkInModal = async function (e){
     e.preventDefault();
-    modal = document.querySelector(btnModal.getAttribute("href"));
     const valueToken = JSON.parse(token);
     const formEl = document.querySelector("#form-add-photo");
     const formData = new FormData(formEl);
     const fileInput = document.getElementById("photoInput");
     const errorMessage = document.querySelector("#photo-input-error");
 
-    console.log(fileInput);
-
     // Vérifier si un fichier a été sélectionné
     if (!fileInput.files || fileInput.files.length === 0) {
         e.preventDefault();
-        console.log("Pas d'image");
         errorMessage.textContent = "Veuillez ajouter une image avant de soumettre le formulaire.";
         errorMessage.classList.remove("hidden"); // Affiche le message d'erreur
         fileInput.focus(); // Met le focus sur le champ
@@ -290,8 +253,6 @@ const addWorkInModal = async function (e){
         if (!response.ok) {
             throw new Error("Erreur lors de l'ajout du projet.");
         }
-
-        console.log("Ajout réussi :", await response.json());
         
         // Réinitialiser le champ file
         fileInput.value = "";
@@ -304,8 +265,6 @@ const addWorkInModal = async function (e){
 
         // Réinitialiser tout le formulaire
         formEl.reset();
-
-        console.log("Formulaire réinitialisé !");
 
         // Actualiser la liste des travaux
         await updateWorks();
@@ -328,20 +287,15 @@ export function initializeModal(){
 
 // Affiche la vue moddale "Ajout de photo"
 function clickOnAddPhotoModal(){
-    modal = document.querySelector(btnModal.getAttribute("href"));
-    addPhotoBtn = modal.querySelector(".modal-wrapper #add-picture-btn");
     addPhotoBtn.addEventListener("click", showAddPhotoModal);
 }
 // Affiche le vue de présentation des projets "work"
 function clickOnReturnIcon(){
-    modal = document.querySelector(btnModal.getAttribute("href"));
-    returnIcon = modal.querySelector("#modal-top .fa-arrow-left");
     returnIcon.addEventListener("click", showPresentationModal);
 }
 
 // Gestion des projets dans la modale Ajout et Suppression
 function clickOnDeleteIcon() {
-    modal = document.querySelector(btnModal.getAttribute("href"));
     modal.querySelectorAll(".picture .fa-trash-can").forEach(i => {
         i.addEventListener("click", deleteWorkInModal);
     })   
@@ -357,7 +311,8 @@ function clickOnAddWork() {
 function clickOnAddPhoto(){
     const imageInputEl = document.getElementById("photoInput");
     if (imageInputEl) {
-        imageInputEl.addEventListener("change", previewImage);
+    imageInputEl.addEventListener("change", validateImageSize);
+    imageInputEl.addEventListener("change", previewImage);
     } else {
         console.error("L'élément avec l'ID 'photoInput' est introuvable.");
     }
@@ -375,8 +330,8 @@ window.addEventListener("keydown", function (e) {
 
 const trapFocusInModal = function (e) {
     e.preventDefault();
-    modal = document.querySelector(btnModal.getAttribute("href"));
 
+    let focusablesElements = [];
     if (modal.querySelector("#modal-presentation") && !modal.querySelector("#modal-presentation").classList.contains("hidden")) {
         // Vue #modal-presentation : Seuls les icônes trash-can et le bouton add-picture-btn sont focusables
         focusablesElements = Array.from(modal.querySelectorAll("#add-picture-btn"));
@@ -423,12 +378,4 @@ function validateImageSize(event) {
             errorMessage.classList.add("hidden");
         }
     }
-}
-
-// Ajouter un écouteur d'événement sur le champ de téléchargement d'image
-const imageInputEl = document.getElementById("photoInput");
-if (imageInputEl) {
-    imageInputEl.addEventListener("change", validateImageSize);
-} else {
-    console.error("L'élément avec l'ID 'photoInput' est introuvable.");
 }

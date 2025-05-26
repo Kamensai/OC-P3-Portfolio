@@ -1,7 +1,7 @@
 import {createLoginLink, createLogoutBtn, clickLogout} from "./login.js";
 import {initializeModal} from "./modale.js";
-import {linkApi} from "./const.js";
-import {works, categories} from "./worksAPI.js";
+import {linkApi, token} from "./const.js";
+import {works as initialWorks, categories} from "./worksAPI.js";
 
 /*********************************************************************************
  * 
@@ -9,38 +9,45 @@ import {works, categories} from "./worksAPI.js";
  * 
  *********************************************************************************/
 
-//Récupération du token stockés dans le localStorage
-export let token = window.localStorage.getItem("token");
-// Cache le lien "modifier" si l'utilisateur n'est pas connecté
+// Cache le bouton "modifier" si l'utilisateur n'est pas connecté
 let modifBtn = document.getElementById("modif-link");
 modifBtn.style.display = "none";
 let categoryChosen = "Tous";
+let currentWorks = initialWorks;
 
-export function tokenExist() {
+function tokenExist() {
     if (token == null) {
-    // Create Login link
-    createLoginLink();
+        // Create Login link
+        createLoginLink();
+        // Affichage des projets (works)
+        generateWorks(currentWorks);
+        // Affichage des catégories
+        generateCategories(categories);
     } else {
         const valueToken = JSON.parse(token);
-        console.log("ValueToken : " + valueToken);
         // Create Logout button
         createLogoutBtn();
         clickLogout();
         // Création de l'icone de modification des projets
         addModifBtn();
+        //  Création de la modale
+        initializeModal();
+        // Affichage des projets (works)
+        generateWorks(currentWorks);
+        // Affichage des catégories
+        generateCategories(categories);
+        // Affichage des travaux dans la modale
+        generateWorksInModal(currentWorks);
     }
 }
 
 tokenExist();
 
-// Récupération des projets (works) depuis l'api
-/*const responseWorks = await fetch(`${linkApi}works`);
-export let works = await responseWorks.json(); */
+// Affichage des projets (works)
+export function generateWorks(currentWorks){
+    for (let i = 0; i < currentWorks.length; i++) {
 
-export function generateWorks(works){
-    for (let i = 0; i < works.length; i++) {
-
-        const figure = works[i];
+        const figure = currentWorks[i];
         // Récupération de l'élément du DOM qui accueillera les Projets
         const divGallery = document.querySelector(".gallery");
         // Création d’une balise dédiée à un projet
@@ -61,13 +68,12 @@ export function generateWorks(works){
      }
 }
 
-generateWorks(works);
 
-//  Récupération et affichage des travaux dans la modale
-function generateWorksInModal(works){
-    for (let i = 0; i < works.length; i++) {
+//  Affichage des travaux dans la modale
+function generateWorksInModal(currentWorks){
+    for (let i = 0; i < currentWorks.length; i++) {
 
-        const figure = works[i];
+        const figure = currentWorks[i];
         // Récupération de l'élément du DOM qui accueillera les Projets
         const divModalPresentation = document.querySelector("#modal-presentation");
         // Création d’une balise dédiée à un projet
@@ -89,12 +95,7 @@ function generateWorksInModal(works){
      }
 }
 
-generateWorksInModal(works);
-
 // Affichage des catégories
-/*const responseCategories = await fetch(`${linkApi}categories`);
-const categories = await responseCategories.json(); */
-
 function generateCategories(categories){
     // Récupération de l'élément du DOM qui accueillera les Catégories
     const divCategories = document.querySelector(".categories");
@@ -126,8 +127,6 @@ function generateCategories(categories){
      }
 }
 
-generateCategories(categories);
-
 // Mets à jour la liste Works
 export async function updateWorks() {
     try {
@@ -139,12 +138,10 @@ export async function updateWorks() {
         const updatedWorks = await responseWorks.json();
 
         // Mettre à jour la variable works
-        works = updatedWorks;  
+        currentWorks = updatedWorks;  
         document.querySelector(".gallery").innerHTML = "";
-        generateWorks(works);
+        generateWorks(currentWorks);
         filterWorksbyCategory(categoryChosen);
-        
-        console.log("Liste des travaux mise à jour :", works);
     } catch (error) {
         console.error("Erreur lors de la mise à jour des travaux :", error);
     }
@@ -154,7 +151,7 @@ export function updateModalPresentation() {
     const modalPresentation = document.querySelector("#modal-presentation");
     if (modalPresentation) {
         modalPresentation.innerHTML = "";
-        generateWorksInModal(works);        
+        generateWorksInModal(currentWorks);        
     }
 }
 
@@ -163,7 +160,6 @@ function btnClicked(btn) {
         document.querySelector(".btnClicked")?.classList.remove("btnClicked");
         btn.classList.add("btnClicked");
         categoryChosen = btn.dataset.id;
-        console.log(categoryChosen);
         filterWorksbyCategory(categoryChosen);
     })
 }
@@ -183,9 +179,7 @@ function filterWorksbyCategory(categoryChosen){
     }
 } 
 
-//  Création de la modale
-initializeModal();
-
+// Ajoute le bouton "modifier" si l'utilisateur est connecté
 function addModifBtn(){
     modifBtn.style.display = null;
 
@@ -194,27 +188,27 @@ function addModifBtn(){
     
 }
 
-// Function to show the custom alert
+// Affiche le custom alert si le token est expiré
 export function showCustomAlertToken(message) {
-  const alertBox = document.getElementById("custom-alert");
-  const alertMessage = document.getElementById("alert-message");
-  const alertOkBtn = document.getElementById("alert-ok-btn");
+    const alertBox = document.getElementById("custom-alert");
+    const alertMessage = document.getElementById("alert-message");
+    const alertOkBtn = document.getElementById("alert-ok-btn");
 
-  // Set the message
-  alertMessage.textContent = message;
+    // Set the message
+    alertMessage.textContent = message;
 
-  // Show the alert box
-  alertBox.classList.remove("hidden");
+    // Show the alert box
+    alertBox.classList.remove("hidden");
 
-  // Add an event listener to the OK button
-  alertOkBtn.addEventListener("click", function handleOkClick() {
-    // Hide the alert box
-    alertBox.classList.add("hidden");
+    // Add an event listener to the OK button
+    alertOkBtn.addEventListener("click", function handleOkClick() {
+        // Hide the alert box
+        alertBox.classList.add("hidden");
 
-    // Remove the event listener to avoid duplicate handlers
-    alertOkBtn.removeEventListener("click", handleOkClick);
+        // Remove the event listener to avoid duplicate handlers
+        alertOkBtn.removeEventListener("click", handleOkClick);
 
-    window.localStorage.removeItem("token");
-    document.location.href = "login.html";
+        window.localStorage.removeItem("token");
+        document.location.href = "login.html";
   });
 }

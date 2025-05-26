@@ -23,8 +23,6 @@ export async function login() {
                 email: email,
                 password: password,
             };
-            console.log(email);
-            console.log(password);
             // Création de la charge utile au format JSON
             const chargeUtile = JSON.stringify(connexion);
 
@@ -34,7 +32,6 @@ export async function login() {
                 headers: { "Content-Type": "application/json" },
                 body: chargeUtile
             });
-            console.log(responseLogin);
             validateLogin(responseLogin);
             const login = await responseLogin.json();
             // Vérification de l'email et du mot de passe côté backend pour la connexion
@@ -45,7 +42,6 @@ export async function login() {
             
         } catch (error) {
             alert("Une erreur est survenue : " + error.message);
-            console.log("Une erreur est survenue : " + error.message);
         }
         
     });
@@ -58,7 +54,6 @@ export async function login() {
  */
 // Vérification de l'email et du mot de passe pour la connexion : Réponse attendure TRUE (200)
 function validateLogin(responseLogin) {
-    console.log(responseLogin);
     if(!responseLogin.ok){
         throw new Error("Erreur dans l’identifiant ou le mot de passe.");
     }   
@@ -91,11 +86,8 @@ function validatePassword(password) {
 function setTokenInLocalStorage(login){
     const token = login.token;
     const valueToken = JSON.stringify(token);
-    console.log("strungify valueToken : "+ valueToken);
     window.localStorage.setItem("token", valueToken);
 }
-
-
 
 // Create login link
 export function createLoginLink(){
